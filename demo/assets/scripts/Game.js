@@ -28,10 +28,25 @@ cc.Class({
             default: null,
             type: cc.Node
         },
+        // rival 节点，用于获取对手弹跳的高度，和控制对手行动开关
+        rival: {
+            default: null,
+            type: cc.Node
+        },
         // score label 的引用
         scoreDisplay: {
             default: null,
             type: cc.Label
+        },
+        // rival score label 的引用
+        rivalScoreDisplay: {
+            default: null,
+            type: cc.Label
+        },
+        // 联网对战按钮的引用
+        startButton: {
+            default: null,
+            type: cc.Node
         },
         // 得分音效资源
         scoreAudio: {
@@ -50,6 +65,14 @@ cc.Class({
         this.spawnNewStar();
         // 初始化计分
         this.score = 0;
+        // 初始化对手计分
+        this.rivalScore = 0;
+    },
+
+    onStartButton: function(event){
+        this.player.getComponent('Player').startJump();
+        this.player.getComponent('Player').initKeyEvent();
+        this.startButton.active = false;
     },
 
     spawnNewStar: function() {
@@ -62,7 +85,8 @@ cc.Class({
         // 在星星组件上暂存 Game 对象的引用
         newStar.getComponent('Star').game = this;
         // 重置计时器，根据消失时间范围随机取一个值
-        this.starDuration = this.minStarDuration + Math.random() * (this.maxStarDuration - this.minStarDuration);
+        //this.starDuration = this.minStarDuration + Math.random() * (this.maxStarDuration - this.minStarDuration);
+        this.starDuration = Number.MAX_VALUE;
         this.timer = 0;
     },
 
@@ -91,7 +115,16 @@ cc.Class({
     gainScore: function () {
         this.score += 1;
         // 更新 scoreDisplay Label 的文字
-        this.scoreDisplay.string = 'Score: ' + this.score;
+        //this.scoreDisplay.string = 'Score: ' + this.score;
+        this.scoreDisplay.string = 'Player  Score: ' + this.score;
+        // 播放得分音效
+        cc.audioEngine.playEffect(this.scoreAudio, false);
+    },
+
+    rivalGainScore: function () {
+        this.rivalScore += 1;
+        // 更新 RivalScore Label 的文字
+        this.rivalScoreDisplay.string = 'Rival  Score: ' + this.rivalScore;
         // 播放得分音效
         cc.audioEngine.playEffect(this.scoreAudio, false);
     },

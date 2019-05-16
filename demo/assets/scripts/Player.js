@@ -57,20 +57,44 @@ cc.Class({
         }
     },
 
-    onLoad: function() {
+    startJump: function(){
         // 初始化跳跃动作
         this.jumpAction = this.setJumpAction();
         this.node.runAction(this.jumpAction);
+    },
 
+    initKeyEvent: function() {
+        // 初始化键盘输入监听
+        cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
+        cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this); 
+
+        var touchReceiver = cc.Canvas.instance.node;
+        touchReceiver.on('touchstart', this.onTouchStart, this);
+        touchReceiver.on('touchend', this.onTouchEnd, this);
+    },
+
+    onLoad: function() {
         // 加速度方向开关
         this.accLeft = false;
         this.accRight = false;
         // 主角当前水平方向速度
         this.xSpeed = 0;
+    },
 
-        // 初始化键盘输入监听
-        cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
-        cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);    
+    onTouchStart (event) {
+        var touchLoc = event.getLocation();
+        if (touchLoc.x >= cc.winSize.width/2) {
+            this.accLeft = false;
+            this.accRight = true;
+        } else {
+            this.accLeft = true;
+            this.accRight = false;
+        }
+    },
+
+    onTouchEnd (event) {
+        this.accLeft = false;
+        this.accRight = false;
     },
 
     onDestroy () {

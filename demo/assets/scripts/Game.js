@@ -3,8 +3,10 @@ const pvp_net_queue = require('./YY_PvP_SDK/net/net_queue');
 const pvp_utils = require('./YY_PvP_SDK/comm/utils');
 const pvp_ask_box = require('./YY_PvP_SDK/comm/ask_box');
 const pvp_public_msg = require('./YY_PvP_SDK/comm/public_msg');
-const pvp_code = require('./YY_PvP_SDK/custom/code');
+const pvp_public_code = require('./YY_PvP_SDK/custom/public_code');
 const pvp_private_msg = require('./YY_PvP_SDK/custom/private_msg');
+const pvp_private_code = require('./YY_PvP_SDK/custom/private_code');
+
 
 cc.Class({
     extends: cc.Component,
@@ -56,6 +58,7 @@ cc.Class({
     },
 
     onLoad: function () {
+        pvp_utils.get_model();
         // 获取地平面的 y 轴坐标
         this.groundY = this.ground.y + this.ground.height/2;
         // 初始化计时器
@@ -160,9 +163,54 @@ cc.Class({
             case pvp_public_msg.websocket_on_close:
                 this.websocket_on_close();
                 break;
+            case pvp_public_msg.public_msg_res_login:
+                this.global_res_login(msg_data.data);
+                break;
+            case pvp_public_msg.public_msg_res_wx_game_rival:
+                this.global_res_game_rival(msg_data.data);
+                break;
+            case pvp_public_msg.public_msg_push_wx_game_ask:
+                this.global_res_game_ask(msg_data.data);
+                break;
+            case pvp_public_msg.public_msg_res_wx_game_join:
+                this.global_res_wx_game_join(msg_data.data);
+                break;
+            case pvp_public_msg.public_msg_res_wx_game_send_to_all:
+                this.public_msg_res_wx_game_send_to_all(msg_data.data);
+                break;
+            case pvp_public_msg.public_msg_res_wx_game_send_to_table:
+                this.public_msg_res_wx_game_send_to_table(msg_data.data);
+                break;
+            case pvp_public_msg.public_msg_res_wx_game_send_to_rival:
+                this.public_msg_res_wx_game_send_to_rival(msg_data.data);
+                break;
             default:
                 break;
         }
+    },
+
+    public_msg_res_wx_game_send_to_all: function(data) {
+        var ret = pvp_public_code.read_cmd_data(data);
+        switch(ret.cmd){
+            default:
+                break;
+        }  
+    },
+
+    public_msg_res_wx_game_send_to_table: function(data) {
+        var ret = pvp_public_code.read_cmd_data(data);
+        switch(ret.cmd){
+            default:
+                break;
+        }  
+    },
+    
+    public_msg_res_wx_game_send_to_rival: function(data) {
+        var ret = pvp_public_code.read_cmd_data(data);
+        switch(ret.cmd){
+            default:
+                break;
+        }  
     },
 
     websocket_on_close: function () {
@@ -175,6 +223,7 @@ cc.Class({
     },
 
     websocket_on_open: function () {
+        //获取玩家GUID，服务器据此区分不同玩家
         var user_guid = "";
         if(pvp_utils.guid_is_empty()){
             user_guid = pvp_utils.uuid();
@@ -183,12 +232,151 @@ cc.Class({
             user_guid = pvp_utils.get_guid();
         }
 
+        //测试使用手机型号作为游戏昵称
         var name = pvp_utils.get_model();
-        var user_info_code = pvp_code.result_local_user_info(name, 10);
 
-        var obj_code = pvp_code.result_guid_type_value_info(pvp_private_msg.company_guid, pvp_private_msg.game_type, user_guid, 1000, user_info_code);
+        //自定义需要向对手展示的玩家信息，测试使用游戏昵称和分值
+        var user_info_code = pvp_private_code.result_local_user_info(name, 10);
 
+        //玩家在游戏内的主要分值，据此匹配同等水平的玩家
+        this.game_value = 999;
+
+        //数据编码（组织GUID、游戏类型、玩家GUID、玩家分值、玩家展示信息）
+        var obj_code = pvp_public_code.result_guid_type_value_info( pvp_private_msg.company_guid, 
+                                                                    pvp_private_msg.game_type, 
+                                                                    user_guid, 
+                                                                    this.game_value,
+                                                                    user_info_code);
+        //发送登录请求
         pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_login, obj_code);
     },
 
+    global_res_login: function (data) {
+        pvp_utils.hide_loading();//隐藏loading
+
+        var ret = pvp_public_code.read_time(data);//登录返回数据，正常返回服务器时间
+
+        if(ret.time == 101){
+            pvp_utils.show_tips("解码错误!", 2);
+            return;
+        }else if(ret.time == 102){
+            pvp_utils.show_tips("company guid长度错误（只能36位）!", 2);
+            return;
+        }else if(ret.time == 103){
+            pvp_utils.show_tips("game type错误（不能是0）！", 2);
+            return;
+        }else if(ret.time == 104){
+            pvp_utils.show_tips("user guid长度错误（只能36位）!", 2);
+            return;
+        }else if(ret.time == 105){
+            pvp_utils.show_tips("消息数量超限!", 2);
+            return;
+        }else if(ret.time == 106){
+            pvp_utils.show_tips("在线人数超限!", 2);
+            return;
+        }
+        else if(ret.time == 107){
+            pvp_utils.show_tips("company guid到期!", 2);
+            return;
+        }
+        else{
+            //pvp_utils.show_tips("登录成功，正在匹配对手!", 2);
+
+            pvp_utils.set_server_time(ret.time);//记录服务器时间备用
+
+            this.schedule(this.send_heartbeat, 30);//每隔30秒发送心跳消息
+
+            //请求匹配对手
+            pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_wx_game_rival, "");
+        }
+    },
+    
+    send_heartbeat: function() {
+        //发送心跳消息，服务器心跳检测超时后会断开网络连接
+        pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_heartbeat, "");
+    },
+
+    global_res_game_rival: function (data) {
+        var ret = pvp_public_code.read_res(data);
+
+        //匹配失败将会收到res参数，匹配成功将会收到对手信息
+        if(isNaN(ret.res)){
+            //匹配成功，解码对手信息
+            var ret = pvp_public_code.read_info_value(data);
+
+            //对手分值，可以展示出来
+            var game_value = ret.game_value;
+
+            //对手信息二进制编码
+            var user_info = ret.user_info;
+
+            //解码对手信息
+            this.rival_info = pvp_private_code.read_local_user_info(user_info);
+
+            //提示匹配成功，并展示对手信息
+            pvp_ask_box.instance().show("已经找到对手‘" + this.rival_info.name + "’,等待对方同意！");
+        }
+        else{
+            pvp_utils.show_tips("正在匹配对手，请稍候!", 2);
+        }
+    },
+
+    global_res_game_ask: function (data) {
+        //获取消息数据
+        var ret = pvp_public_code.read_info_value(data);
+
+        //对手游戏分值
+        var game_value = ret.game_value;
+
+        //对手信息编码
+        var user_info = ret.user_info;
+
+        //解码对手信息
+        this.rival_info = pvp_private_code.read_local_user_info(user_info);
+
+        //展示对手信息，询问是否接受挑战
+        pvp_ask_box.instance().show("'" + this.rival_info.name + "'想与您对战，是否接受？",  
+                                    this, this.agree_join_game, this.disagree_join_game);
+    },
+
+    agree_join_game: function () {
+        //接受挑战，发送接受的消息数据
+        pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_wx_game_join, pvp_public_code.result_res(0));
+    },
+
+    disagree_join_game: function () {
+        //拒绝挑战，发送拒绝的消息数据
+        pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_wx_game_join, pvp_public_code.result_res(1));
+    },
+
+    global_res_wx_game_join: function (data) {
+        
+        var ret = pvp_public_code.read_guid_res(data);//是否接受挑战的返回数据
+        
+        if(ret.res == 0){//对方接受挑战
+            if(ret.guid == pvp_utils.get_guid()){
+                
+                this.is_rival = false;//标记挑战者
+
+                pvp_utils.show_tips("即将开始对战！", 2);
+
+                this.wx_game_init();//开始初始化并同步场景数据
+            }else{
+                
+                this.is_rival = true;//标记挑战者
+
+                pvp_utils.show_tips("即将开始对战！", 2);
+            }
+        }else{//对方拒绝挑战
+            pvp_ask_box.instance().show("对方拒绝加入，点确定重新匹配!",  this, this.req_wx_game_rival);
+        }
+    },
+
+    wx_game_init: function () {
+        var obj_data = pvp_private_code.result_init_plank_array(this.plank_random_arr, this.plank_point_random_arr);
+
+        var obj_code = pvp_public_code.result_cmd_data(pvp_private_msg.local_msg_init_round_data, obj_data);
+
+        pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_wx_game_send_to_table, obj_code);
+    },
 });

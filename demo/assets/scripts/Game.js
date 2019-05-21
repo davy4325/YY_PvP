@@ -70,14 +70,11 @@ cc.Class({
         this.score = 0;
         // 初始化对手计分
         this.rivalScore = 0;
+
+        // 在角色组件上暂存 Game 对象的引用
+        this.player.getComponent('Player').game = this;
     },
 
-    startPlayer: function(event){
-        this.player.getComponent('Player').startJump();
-        this.player.getComponent('Player').initKeyEvent();
-        this.startButton.active = false;
-    },
-    
     spawnNewStar: function() {
         // 使用给定的模板在场景中生成一个新节点
         var newStar = cc.instantiate(this.starPrefab);
@@ -93,15 +90,36 @@ cc.Class({
         this.timer = 0;
     },
 
+    createNewStarPostionArray: function (num) {
+        //创建随机星星坐标数组
+        this.star_point_array = new Array();
+        
+        //预创建100个，可以在某个临界点增加新坐标
+        for(let i = 0; i < num; i++){
+            var randX = 0;
+            // 根据地平面位置和主角跳跃高度，随机得到一个星星的 y 坐标
+            var randY = this.groundY + Math.random() * this.player.getComponent('Player').jumpHeight + 50;
+            // 根据屏幕宽度，随机得到一个星星 x 坐标
+            var maxX = this.node.width/2;
+            randX = (Math.random() - 0.5) * 2 * maxX;
+            // 返回星星坐标
+            var pt = cc.v2(randX, randY);
+            this.star_point_array.push(pt);
+        }
+    },
+
     getNewStarPosition: function () {
-        var randX = 0;
-        // 根据地平面位置和主角跳跃高度，随机得到一个星星的 y 坐标
-        var randY = this.groundY + Math.random() * this.player.getComponent('Player').jumpHeight + 50;
-        // 根据屏幕宽度，随机得到一个星星 x 坐标
-        var maxX = this.node.width/2;
-        randX = (Math.random() - 0.5) * 2 * maxX;
-        // 返回星星坐标
-        return cc.v2(randX, randY);
+        if( this.star_point_index == undefined
+            || this.star_point_index >= this.star_point_array.length){
+            return cc.v2(0, this.groundY + 150);
+        }
+
+        //根据序号产生新的信息坐标
+        var pt =  this.star_point_array[this.star_point_index];
+
+        this.star_point_index++;
+        
+        return pt;
     },
 
     update: function (dt) {
@@ -138,8 +156,17 @@ cc.Class({
         cc.director.loadScene('game');
     },
 
+    startPlayer: function(){
+        this.player.getComponent('Player').startJump();
+        this.player.getComponent('Player').initKeyEvent();
+
+        this.rival.getComponent('Player').startJump();
+
+        this.startButton.active = false;
+    },
+
     onStartButton: function(event){
-        this.connect_to_server(); 
+        this.connect_to_server();
     },
 
     connect_to_server: function () {
@@ -200,6 +227,12 @@ cc.Class({
     public_msg_res_wx_game_send_to_table: function(data) {
         var ret = pvp_public_code.read_cmd_data(data);
         switch(ret.cmd){
+            case pvp_private_msg.local_msg_init_round_data_part:
+                this.round_init_part(ret.data);
+                break;
+            case pvp_private_msg.local_msg_init_round_data_over:
+                this.round_init_over(ret.data);
+                break;
             default:
                 break;
         }  
@@ -208,6 +241,15 @@ cc.Class({
     public_msg_res_wx_game_send_to_rival: function(data) {
         var ret = pvp_public_code.read_cmd_data(data);
         switch(ret.cmd){
+            case pvp_private_msg.local_msg_run_left:
+                this.rival_run_left(ret.data);
+                break;
+            case pvp_private_msg.local_msg_run_right:
+                this.rival_run_right(ret.data);
+                break;
+            case pvp_private_msg.local_msg_run_stop:
+                this.rival_run_stop(ret.data);
+                break;
             default:
                 break;
         }  
@@ -373,10 +415,85 @@ cc.Class({
     },
 
     wx_game_init: function () {
-        var obj_data = pvp_private_code.result_init_plank_array(this.plank_random_arr, this.plank_point_random_arr);
+        //预置80个星星坐标，因为有单个消息包长度不能超过1000字节的限制，所以需要分多消息传输
 
-        var obj_code = pvp_public_code.result_cmd_data(pvp_private_msg.local_msg_init_round_data, obj_data);
+        //预置40个星星坐标
+        this.createNewStarPostionArray(40);
 
-        pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_wx_game_send_to_table, obj_code);
+        var obj_data_part = pvp_private_code.result_star_postion(this.star_point_array);
+
+        var obj_code_part = pvp_public_code.result_cmd_data(pvp_private_msg.local_msg_init_round_data_part, obj_data_part);
+        /*******此处限制length不能超过1000**********/
+        cc.log(obj_code_part.length);
+
+        pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_wx_game_send_to_table, obj_code_part);
+
+        //预置40个星星坐标
+        this.createNewStarPostionArray(40);
+
+        var obj_data_over = pvp_private_code.result_star_postion(this.star_point_array);
+
+        var obj_code_over = pvp_public_code.result_cmd_data(pvp_private_msg.local_msg_init_round_data_over, obj_data_over);
+        /*******此处限制length不能超过1000**********/
+        cc.log(obj_code_over.length);
+
+        pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_wx_game_send_to_table, obj_code_over);
+    },
+
+    round_init_part: function (data) {
+        //接收部分坐标数据
+        var ret = pvp_private_code.read_star_postion(data);
+        this.star_point_array = ret.arr_point;
+    },
+
+    round_init_over: function (data) {
+        //接收部分坐标数据
+        var ret = pvp_private_code.read_star_postion(data);
+
+        //合并坐标数据
+        this.star_point_array.push.apply(this.star_point_array, ret.arr_point);
+
+        //去除询问
+        pvp_ask_box.instance().destory();
+        //设置开始坐标
+        this.star_point_index = 0;
+        //开头跳动
+        this.startPlayer();
+    },
+
+    send_rival_left: function () {
+        //请求向左移动
+        var obj_code = pvp_public_code.result_cmd_data(pvp_private_msg.local_msg_run_left, "");
+        //只发送给对手
+        pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_wx_game_send_to_rival, obj_code);
+    },
+
+    send_rival_right: function () {
+        //请求向右移动
+        var obj_code = pvp_public_code.result_cmd_data(pvp_private_msg.local_msg_run_right, "");
+        //只发送给对手
+        pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_wx_game_send_to_rival, obj_code);
+    },
+
+    send_rival_stop: function () {
+        //请求停止
+        var obj_code = pvp_public_code.result_cmd_data(pvp_private_msg.local_msg_run_stop, "");
+        //只发送给对手
+        pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_wx_game_send_to_rival, obj_code);
+    },
+    
+    rival_run_left: function (data) {
+        this.rival.getComponent('Player').accLeft = true;
+        this.rival.getComponent('Player').accRight = false;
+    },
+
+    rival_run_right: function (data) {
+        this.rival.getComponent('Player').accLeft = false;
+        this.rival.getComponent('Player').accRight = true;
+    },
+
+    rival_run_stop: function (data) {
+        this.rival.getComponent('Player').accLeft = false;
+        this.rival.getComponent('Player').accRight = false;
     },
 });

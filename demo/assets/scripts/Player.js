@@ -86,15 +86,21 @@ cc.Class({
         if (touchLoc.x >= cc.winSize.width/2) {
             this.accLeft = false;
             this.accRight = true;
+            
+            this.game.send_rival_right();
         } else {
             this.accLeft = true;
             this.accRight = false;
+
+            this.game.send_rival_left();
         }
     },
 
     onTouchEnd (event) {
         this.accLeft = false;
         this.accRight = false;
+
+        this.game.send_rival_stop();
     },
 
     onDestroy () {

@@ -3,6 +3,14 @@ const AMFArray = require('../net/AMF/AMFArray');
 
 var private_code = cc.Class({
     statics: {
+
+      result_local_user_info: function (name, score) {
+        var amf_obj = new AMFObject();
+        amf_obj.add(name, 'name');
+        amf_obj.add(score, 'score');
+        return amf_obj.write();
+      },
+
       read_local_user_info: function (data) {
         var amf_obj = new AMFObject();
         amf_obj.new_deserializer(data);
@@ -13,13 +21,8 @@ var private_code = cc.Class({
         ret.name = amf_obj.get_value('name');
         return ret;
       },
-      result_local_user_info: function (name, score) {
-        var amf_obj = new AMFObject();
-        amf_obj.add(name, 'name');
-        amf_obj.add(score, 'score');
-        return amf_obj.write();
-      },
-      result_init_plank_array: function (arr_point) {
+      
+      result_star_postion: function (arr_point) {
         var amf_obj = new AMFObject();
 
         var amf_arr_point = new AMFArray();
@@ -38,7 +41,8 @@ var private_code = cc.Class({
 
         return amf_obj.write();
       },
-      read_init_plank_array: function (data) {
+      
+      read_star_postion: function (data) {
         var amf_obj = new AMFObject();
         amf_obj.new_deserializer(data);
         amf_obj.read();

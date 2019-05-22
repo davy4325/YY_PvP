@@ -408,6 +408,11 @@ cc.Class({
                 this.is_rival = true;//标记挑战者
 
                 pvp_utils.show_tips("即将开始对战！", 2);
+
+                //挑战者客户端交换角色位置，保持两个客户端角色初始位置一致
+                var x = this.player.x;
+                this.player.x = this.rival.x;
+                this.rival.x = x;
             }
         }else{//对方拒绝挑战
             pvp_ask_box.instance().show("对方拒绝加入，点确定重新匹配!",  this, this.req_wx_game_rival);

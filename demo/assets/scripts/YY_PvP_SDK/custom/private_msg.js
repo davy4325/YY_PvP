@@ -4,11 +4,11 @@ var private_msg = {
     game_type: 1,
 
     /*---------------local msg---------------*/
-    local_msg_init_round_data_part: 10001,
-    local_msg_init_round_data_over: 10002,
-    local_msg_run_left: 10003,
-    local_msg_run_right: 10004,
-    local_msg_run_stop: 10005,
-    local_msg_game_over: 10006,
+    local_msg_init_round_data_part: 10001,//同步场景
+    local_msg_init_round_data_over: 10002,//同步场景
+    local_msg_run_left: 10003,//向左移动
+    local_msg_run_right: 10004,//向右移动
+    local_msg_run_stop: 10005,//停止移动
+    local_msg_game_over: 10006,//游戏结束
 }
 module.exports = private_msg;

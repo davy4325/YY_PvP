@@ -525,8 +525,8 @@
     "_enabled": true,
     "jumpHeight": 150,
     "jumpDuration": 0.3,
-    "maxMoveSpeed": 400,
-    "accel": 350,
+    "maxMoveSpeed": 50,
+    "accel": 20,
     "jumpAudio": {
       "__uuid__": "eb514f5f-4725-41b8-9568-2643e4af2871"
     },
@@ -724,8 +724,8 @@
     "_enabled": true,
     "jumpHeight": 150,
     "jumpDuration": 0.3,
-    "maxMoveSpeed": 400,
-    "accel": 350,
+    "maxMoveSpeed": 50,
+    "accel": 20,
     "jumpAudio": {
       "__uuid__": "eb514f5f-4725-41b8-9568-2643e4af2871"
     },

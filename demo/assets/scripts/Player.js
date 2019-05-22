@@ -38,9 +38,22 @@ cc.Class({
         switch(event.keyCode) {
             case cc.macro.KEY.a:
                 this.accLeft = true;
+
+                if(this.isStop){
+                    //发送向左移动的消息
+                    this.game.send_rival_left();
+                    this.isStop = false;
+                }
                 break;
             case cc.macro.KEY.d:
                 this.accRight = true;
+
+                if(this.isStop){
+                    //发送向右移动的消息
+                    this.game.send_rival_right();
+                    this.isStop = false;
+                }
+
                 break;
         }
     },
@@ -54,6 +67,13 @@ cc.Class({
             case cc.macro.KEY.d:
                 this.accRight = false;
                 break;
+        }
+
+        if(event.keyCode == cc.macro.KEY.a
+            || event.keyCode == cc.macro.KEY.d){
+            //发送停止移动的消息
+            this.game.send_rival_stop();
+            this.isStop = true;
         }
     },
 
@@ -79,6 +99,9 @@ cc.Class({
         this.accRight = false;
         // 主角当前水平方向速度
         this.xSpeed = 0;
+
+        // 角色是否为停止状态，用来防止重复发送多余的左右移动消息
+        this.isStop = true;
     },
 
     onTouchStart (event) {
@@ -87,12 +110,21 @@ cc.Class({
             this.accLeft = false;
             this.accRight = true;
             
-            this.game.send_rival_right();
+            if(this.isStop){
+                //发送向右移动的消息
+                this.game.send_rival_right();
+                this.isStop = false;
+            }
+            
         } else {
             this.accLeft = true;
             this.accRight = false;
 
-            this.game.send_rival_left();
+            if(this.isStop){
+                //发送向左移动的消息
+                this.game.send_rival_left();
+                this.isStop = false;
+            }
         }
     },
 
@@ -100,7 +132,9 @@ cc.Class({
         this.accLeft = false;
         this.accRight = false;
 
+        //发送停止移动的消息
         this.game.send_rival_stop();
+        this.isStop = true;
     },
 
     onDestroy () {

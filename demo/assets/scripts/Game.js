@@ -284,7 +284,7 @@ cc.Class({
         //数据编码（组织GUID、游戏类型、对战模式、玩家GUID、玩家分值、玩家展示信息）
         var obj_code = pvp_public_code.result_guid_type_value_info( pvp_private_msg.company_guid, 
                                                                     pvp_private_msg.game_type, 
-                                                                    1,//0：普通对战 1：好友对战，不受他人挑战干扰
+                                                                    0,//0：普通对战 1：好友对战，不受他人挑战干扰
                                                                     user_guid, 
                                                                     this.game_value,
                                                                     user_info_code);
@@ -326,7 +326,6 @@ cc.Class({
             pvp_utils.set_server_time(ret.time);//记录服务器时间备用
 
             this.schedule(this.send_heartbeat, 30);//每隔30秒发送心跳消息
-
 
             //请求匹配对手，好友对战
             //var rival_guid = "E01451F0-942B-4F98-A525-2F8939417138";

@@ -22,7 +22,9 @@ var public_msg = {
     public_msg_res_wx_game_join: 2039,
     public_msg_req_wx_game_updae_value: 2040,
     public_msg_res_wx_game_updae_value: 2041,
-    public_msg_wx_game_rival_disconnect: 2042,
-    public_msg_wx_game_msg_over_limit: 2043,
+    public_msg_req_wx_game_set_friend_mode: 2042,
+    public_msg_res_wx_game_set_friend_mode: 2043,
+    public_msg_wx_game_rival_disconnect: 2044,
+    public_msg_wx_game_msg_over_limit: 2045,
 }
 module.exports = public_msg;

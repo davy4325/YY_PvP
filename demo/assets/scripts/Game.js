@@ -266,14 +266,12 @@ cc.Class({
 
     websocket_on_open: function () {
         //获取玩家GUID，服务器据此区分不同玩家
-        var user_guid = "";
+        var user_guid = pvp_utils.get_guid();
         if(pvp_utils.guid_is_empty()){
             user_guid = pvp_utils.uuid();
             pvp_utils.save_guid(user_guid);
-        }else{
-            user_guid = pvp_utils.get_guid();
         }
-
+        cc.log("user_guid:" + user_guid);
         //测试使用手机型号作为游戏昵称
         var name = pvp_utils.get_model();
 
@@ -283,9 +281,10 @@ cc.Class({
         //玩家在游戏内的主要分值，据此匹配同等水平的玩家
         this.game_value = 999;
 
-        //数据编码（组织GUID、游戏类型、玩家GUID、玩家分值、玩家展示信息）
+        //数据编码（组织GUID、游戏类型、对战模式、玩家GUID、玩家分值、玩家展示信息）
         var obj_code = pvp_public_code.result_guid_type_value_info( pvp_private_msg.company_guid, 
                                                                     pvp_private_msg.game_type, 
+                                                                    1,//0：普通对战 1：好友对战，不受他人挑战干扰
                                                                     user_guid, 
                                                                     this.game_value,
                                                                     user_info_code);
@@ -328,7 +327,12 @@ cc.Class({
 
             this.schedule(this.send_heartbeat, 30);//每隔30秒发送心跳消息
 
-            //请求匹配对手
+
+            //请求匹配对手，好友对战
+            //var rival_guid = "E01451F0-942B-4F98-A525-2F8939417138";
+            //pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_wx_game_rival, pvp_public_code.result_guid(rival_guid));
+            
+            //请求匹配对手，自由对战
             pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_wx_game_rival, "");
         }
     },

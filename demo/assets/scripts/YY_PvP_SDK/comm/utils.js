@@ -35,14 +35,15 @@ var utils = cc.Class({
         })
       },
       guid_is_empty(){
-        if(this._guid == null
+        if(this._guid == undefined
+          || this._guid == null
           || this._guid == ""){
           return true;
         }
         return false;
       },
       get_guid: function (){
-        if(this._guid == ""){
+        if(this.guid_is_empty()){
           this._guid = utils.get_local_storage_str("guid");
         }
         return this._guid;

@@ -14,7 +14,7 @@ var public_msg = {
     public_msg_res_wx_game_send_to_table: 2031,
     public_msg_req_wx_game_send_to_rival: 2032,
     public_msg_res_wx_game_send_to_rival: 2033,
-    public_msg_res_wx_game_exit: 2034,
+    public_msg_req_wx_game_exit: 2034,
     public_msg_req_wx_game_rival: 2035,
     public_msg_res_wx_game_rival: 2036,
     public_msg_push_wx_game_ask: 2037,

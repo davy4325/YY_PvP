@@ -79,5 +79,11 @@ var public_code = cc.Class({
 
         return ret;
       },
+      result_info_value: function (game_value, user_info) {
+        var amf_obj = new AMFObject();
+        amf_obj.add(game_value, 'game_value');
+        amf_obj.add(user_info, 'user_info');
+        return amf_obj.write();
+      },
     }
 });

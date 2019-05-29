@@ -193,30 +193,30 @@ cc.Class({
             case pvp_public_msg.public_msg_res_login:
                 this.global_res_login(msg_data.data);
                 break;
-            case pvp_public_msg.public_msg_res_wx_game_rival:
+            case pvp_public_msg.public_msg_res_rival:
                 this.global_res_game_rival(msg_data.data);
                 break;
-            case pvp_public_msg.public_msg_push_wx_game_ask:
+            case pvp_public_msg.public_msg_push_ask:
                 this.global_res_game_ask(msg_data.data);
                 break;
-            case pvp_public_msg.public_msg_res_wx_game_join:
-                this.global_res_wx_game_join(msg_data.data);
+            case pvp_public_msg.public_msg_res_join:
+                this.global_res_join(msg_data.data);
                 break;
-            case pvp_public_msg.public_msg_res_wx_game_send_to_all:
-                this.public_msg_res_wx_game_send_to_all(msg_data.data);
+            case pvp_public_msg.public_msg_res_send_to_all:
+                this.public_msg_res_send_to_all(msg_data.data);
                 break;
-            case pvp_public_msg.public_msg_res_wx_game_send_to_table:
-                this.public_msg_res_wx_game_send_to_table(msg_data.data);
+            case pvp_public_msg.public_msg_res_send_to_table:
+                this.public_msg_res_send_to_table(msg_data.data);
                 break;
-            case pvp_public_msg.public_msg_res_wx_game_send_to_rival:
-                this.public_msg_res_wx_game_send_to_rival(msg_data.data);
+            case pvp_public_msg.public_msg_res_send_to_rival:
+                this.public_msg_res_send_to_rival(msg_data.data);
                 break;
             default:
                 break;
         }
     },
 
-    public_msg_res_wx_game_send_to_all: function(data) {
+    public_msg_res_send_to_all: function(data) {
         var ret = pvp_public_code.read_cmd_data(data);
         switch(ret.cmd){
             default:
@@ -224,7 +224,7 @@ cc.Class({
         }  
     },
 
-    public_msg_res_wx_game_send_to_table: function(data) {
+    public_msg_res_send_to_table: function(data) {
         var ret = pvp_public_code.read_cmd_data(data);
         switch(ret.cmd){
             case pvp_private_msg.local_msg_init_round_data_part:
@@ -238,7 +238,7 @@ cc.Class({
         }  
     },
     
-    public_msg_res_wx_game_send_to_rival: function(data) {
+    public_msg_res_send_to_rival: function(data) {
         var ret = pvp_public_code.read_cmd_data(data);
         switch(ret.cmd){
             case pvp_private_msg.local_msg_run_left:
@@ -329,10 +329,10 @@ cc.Class({
 
             //请求匹配对手，好友对战
             //var rival_guid = "E01451F0-942B-4F98-A525-2F8939417138";
-            //pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_wx_game_rival, pvp_public_code.result_guid(rival_guid));
+            //pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_rival, pvp_public_code.result_guid(rival_guid));
             
             //请求匹配对手，自由对战
-            pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_wx_game_rival, "");
+            pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_rival, "");
         }
     },
     
@@ -386,15 +386,15 @@ cc.Class({
 
     agree_join_game: function () {
         //接受挑战，发送接受的消息数据
-        pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_wx_game_join, pvp_public_code.result_res(0));
+        pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_join, pvp_public_code.result_res(0));
     },
 
     disagree_join_game: function () {
         //拒绝挑战，发送拒绝的消息数据
-        pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_wx_game_join, pvp_public_code.result_res(1));
+        pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_join, pvp_public_code.result_res(1));
     },
 
-    global_res_wx_game_join: function (data) {
+    global_res_join: function (data) {
         
         var ret = pvp_public_code.read_guid_res(data);//是否接受挑战的返回数据
         
@@ -418,7 +418,7 @@ cc.Class({
                 this.rival.x = x;
             }
         }else{//对方拒绝挑战
-            pvp_ask_box.instance().show("对方拒绝加入，点确定重新匹配!",  this, this.req_wx_game_rival);
+            pvp_ask_box.instance().show("对方拒绝加入，点确定重新匹配!",  this, this.req_rival);
         }
     },
 
@@ -434,7 +434,7 @@ cc.Class({
         /*******此处限制length不能超过1000**********/
         cc.log(obj_code_part.length);
 
-        pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_wx_game_send_to_table, obj_code_part);
+        pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_send_to_table, obj_code_part);
 
         //预置40个星星坐标
         this.createNewStarPostionArray(40);
@@ -445,7 +445,7 @@ cc.Class({
         /*******此处限制length不能超过1000**********/
         cc.log(obj_code_over.length);
 
-        pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_wx_game_send_to_table, obj_code_over);
+        pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_send_to_table, obj_code_over);
     },
 
     round_init_part: function (data) {
@@ -473,21 +473,21 @@ cc.Class({
         //请求向左移动
         var obj_code = pvp_public_code.result_cmd_data(pvp_private_msg.local_msg_run_left, "");
         //只发送给对手
-        pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_wx_game_send_to_rival, obj_code);
+        pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_send_to_rival, obj_code);
     },
 
     send_rival_right: function () {
         //请求向右移动
         var obj_code = pvp_public_code.result_cmd_data(pvp_private_msg.local_msg_run_right, "");
         //只发送给对手
-        pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_wx_game_send_to_rival, obj_code);
+        pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_send_to_rival, obj_code);
     },
 
     send_rival_stop: function () {
         //请求停止
         var obj_code = pvp_public_code.result_cmd_data(pvp_private_msg.local_msg_run_stop, "");
         //只发送给对手
-        pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_wx_game_send_to_rival, obj_code);
+        pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_send_to_rival, obj_code);
     },
     
     rival_run_left: function (data) {

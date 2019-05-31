@@ -3,7 +3,7 @@ const pvp_net_queue = require('./YY_PvP_SDK/net/net_queue');
 const pvp_utils = require('./YY_PvP_SDK/comm/utils');
 const pvp_ask_box = require('./YY_PvP_SDK/comm/ask_box');
 const pvp_public_msg = require('./YY_PvP_SDK/comm/public_msg');
-const pvp_public_code = require('./YY_PvP_SDK/custom/public_code');
+const pvp_public_code = require('./YY_PvP_SDK/comm/public_code');
 const pvp_private_msg = require('./YY_PvP_SDK/custom/private_msg');
 const pvp_private_code = require('./YY_PvP_SDK/custom/private_code');
 

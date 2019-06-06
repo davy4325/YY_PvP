@@ -79,6 +79,19 @@ var public_code = cc.Class({
 
         return ret;
       },
+      read_reconnect_info_value: function (data) {
+        var amf_obj = new AMFObject();
+        amf_obj.new_deserializer(data);
+        amf_obj.read();
+
+        var ret = new Object();
+
+        ret.type = amf_obj.get_value('type');
+        ret.game_value = amf_obj.get_value('game_value');
+        ret.user_info = amf_obj.get_value('user_info');
+
+        return ret;
+      },
       result_info_value: function (game_value, user_info) {
         var amf_obj = new AMFObject();
         amf_obj.add(game_value, 'game_value');

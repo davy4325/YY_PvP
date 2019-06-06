@@ -196,6 +196,9 @@ cc.Class({
             case pvp_public_msg.public_msg_res_rival:
                 this.global_res_game_rival(msg_data.data);
                 break;
+            case pvp_public_msg.public_msg_reconnect:
+                this.global_reconnect(msg_data.data);
+                break;
             case pvp_public_msg.public_msg_push_ask:
                 this.global_res_game_ask(msg_data.data);
                 break;
@@ -363,6 +366,27 @@ cc.Class({
         }
         else{
             pvp_utils.show_tips("正在匹配对手，请稍候!", 2);
+        }
+    },
+
+    global_reconnect: function (data) {
+        //重连成功，解码对手信息
+        var ret = pvp_public_code.read_reconnect_info_value(data);
+
+        //对手分值，可以展示出来
+        var game_value = ret.game_value;
+
+        //对手信息二进制编码
+        var user_info = ret.user_info;
+
+        //解码对手信息
+        this.rival_info = pvp_private_code.read_local_user_info(user_info);
+
+        if(ret.type == 0){//断线方等待对手发送场景数据
+            pvp_utils.show_tips("已经重新连接对手‘" + this.rival_info.name + "’,等待对方发送场景数据！", 5);
+        }
+        else{//在线方向对方发送场景数据
+            pvp_utils.show_tips("对手‘" + this.rival_info.name + "’已经重新进入, 向对方发送场景数据！", 5);
         }
     },
 

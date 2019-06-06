@@ -26,5 +26,10 @@ var public_msg = {
     public_msg_res_set_friend_mode: 2043,
     public_msg_rival_disconnect: 2044,
     public_msg_over_limit: 2045,
+	public_msg_req_reset_rival: 2046,
+	public_msg_res_reset_rival: 2047,
+	public_msg_req_exit: 2048,
+	public_msg_res_exit: 2049,
+	public_msg_reconnect: 2050,
 }
 module.exports = public_msg;

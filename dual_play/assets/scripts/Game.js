@@ -190,6 +190,9 @@ cc.Class({
             case pvp_public_msg.websocket_on_close:
                 this.websocket_on_close();
                 break;
+            case pvp_public_msg.public_msg_rival_disconnect:
+                this.global_rival_disconnect(msg_data.data);
+                break;
             case pvp_public_msg.public_msg_res_login:
                 this.global_res_login(msg_data.data);
                 break;
@@ -293,6 +296,10 @@ cc.Class({
                                                                     user_info_code);
         //发送登录请求
         pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_login, obj_code);
+    },
+
+    global_rival_disconnect: function (data) {
+        pvp_utils.show_tips("对手掉线!", 20);
     },
 
     global_res_login: function (data) {

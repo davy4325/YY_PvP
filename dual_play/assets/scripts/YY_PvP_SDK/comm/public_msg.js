@@ -30,6 +30,7 @@ var public_msg = {
 	public_msg_res_reset_rival: 2047,
 	public_msg_req_exit: 2048,
 	public_msg_res_exit: 2049,
-	public_msg_reconnect: 2050,
+    public_msg_reconnect: 2050,
+    public_msg_rival_exit: 2051,
 }
 module.exports = public_msg;

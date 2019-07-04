@@ -193,6 +193,9 @@ cc.Class({
             case pvp_public_msg.public_msg_rival_disconnect:
                 this.global_rival_disconnect(msg_data.data);
                 break;
+            case pvp_public_msg.public_msg_rival_exit:
+                this.public_msg_rival_exit(msg_data.data);
+                break;
             case pvp_public_msg.public_msg_res_login:
                 this.global_res_login(msg_data.data);
                 break;
@@ -300,6 +303,10 @@ cc.Class({
 
     global_rival_disconnect: function (data) {
         pvp_utils.show_tips("对手掉线!", 20);
+    },
+
+    public_msg_rival_exit: function (data) {
+        pvp_utils.show_tips("对手离开!", 20);
     },
 
     global_res_login: function (data) {
@@ -423,6 +430,7 @@ cc.Class({
     disagree_join_game: function () {
         //拒绝挑战，发送拒绝的消息数据
         pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_join, pvp_public_code.result_res(1));
+        //pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_exit, "");
     },
 
     global_res_join: function (data) {

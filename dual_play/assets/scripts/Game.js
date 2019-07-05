@@ -345,9 +345,12 @@ cc.Class({
             this.schedule(this.send_heartbeat, 30);//每隔30秒发送心跳消息
 
             //请求匹配对手，好友对战
-            //var rival_guid = "E01451F0-942B-4F98-A525-2F8939417138";
-            //pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_rival, pvp_public_code.result_guid(rival_guid));
-            
+            //F6EF07E9-E389-469E-8EC7-FD082BA0C1A1
+            //7E20C673-114F-48D9-A398-438B2F61318F
+            //var rival_guid = "7E20C673-114F-48D9-A398-438B2F61318F";
+            //pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_friend_rival, pvp_public_code.result_guid(rival_guid));
+            //cc.log(rival_guid);
+            //cc.log(pvp_utils.get_guid());
             //请求匹配对手，自由对战
             pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_rival, "");
         }
@@ -368,6 +371,9 @@ cc.Class({
 
             //对手分值，可以展示出来
             var game_value = ret.game_value;
+
+            cc.log("me:" + pvp_utils.get_guid());
+            cc.log("rival:" + ret.user_guid);
 
             //对手信息二进制编码
             var user_info = ret.user_info;

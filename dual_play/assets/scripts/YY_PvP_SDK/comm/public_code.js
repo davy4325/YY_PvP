@@ -75,6 +75,7 @@ var public_code = cc.Class({
         var ret = new Object();
 
         ret.game_value = amf_obj.get_value('game_value');
+        ret.user_guid = amf_obj.get_value('user_guid');
         ret.user_info = amf_obj.get_value('user_info');
 
         return ret;

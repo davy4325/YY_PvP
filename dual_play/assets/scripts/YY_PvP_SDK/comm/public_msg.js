@@ -32,5 +32,7 @@ var public_msg = {
 	public_msg_res_exit: 2049,
     public_msg_reconnect: 2050,
     public_msg_rival_exit: 2051,
+    public_msg_req_friend_rival: 2052,
+    public_msg_res_friend_rival: 2053,
 }
 module.exports = public_msg;

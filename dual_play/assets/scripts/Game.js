@@ -345,13 +345,13 @@ cc.Class({
             this.schedule(this.send_heartbeat, 30);//每隔30秒发送心跳消息
 
             //请求匹配对手，好友对战
-            //F6EF07E9-E389-469E-8EC7-FD082BA0C1A1
-            //7E20C673-114F-48D9-A398-438B2F61318F
-            //var rival_guid = "7E20C673-114F-48D9-A398-438B2F61318F";
-            //pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_friend_rival, pvp_public_code.result_guid(rival_guid));
-            //cc.log(rival_guid);
-            //cc.log(pvp_utils.get_guid());
+            let browse = "F6EF07E9-E389-469E-8EC7-FD082BA0C1A1";
+            let win32 = "7E20C673-114F-48D9-A398-438B2F61318F";
+            //pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_friend_rival, pvp_public_code.result_guid(browse));
             //请求匹配对手，自由对战
+            //pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_set_friend_mode, pvp_public_code.result_res(1));
+            //pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_rival, pvp_public_code.result_guid(win32));
+
             pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_rival, "");
         }
     },

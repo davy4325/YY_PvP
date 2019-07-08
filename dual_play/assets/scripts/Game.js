@@ -220,6 +220,8 @@ cc.Class({
             case pvp_public_msg.public_msg_res_send_to_rival:
                 this.public_msg_res_send_to_rival(msg_data.data);
                 break;
+            case pvp_public_msg.public_msg_res_network_test:
+                break;
             default:
                 break;
         }
@@ -355,6 +357,7 @@ cc.Class({
 
             //请求匹配对手，自由对战
             pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_rival, "");
+            //pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_network_test, "");
         }
     },
     

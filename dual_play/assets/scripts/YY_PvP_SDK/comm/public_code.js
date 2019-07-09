@@ -49,6 +49,7 @@ var public_code = cc.Class({
 
         var ret = new Object();
         ret.time = parseInt(amf_obj.get_value('time'));
+        ret.is_reconnect = parseInt(amf_obj.get_value('is_reconnect'));
         return ret;
       },
       result_cmd_data: function (cmd, data) {

@@ -190,6 +190,9 @@ cc.Class({
             case pvp_public_msg.websocket_on_close:
                 this.websocket_on_close();
                 break;
+            case pvp_public_msg.websocket_on_repeat:
+                this.websocket_on_repeat();
+                break;
             case pvp_public_msg.public_msg_rival_disconnect:
                 this.global_rival_disconnect(msg_data.data);
                 break;
@@ -268,6 +271,13 @@ cc.Class({
 
     websocket_on_close: function () {
         cc.log("网络连接断开!");
+        //this.connect_to_server();
+    },
+
+    websocket_on_repeat: function () {
+        cc.log("无效重连!");
+        pvp_utils.hide_loading();
+        pvp_utils.show_tips("无效重连!", 2);
     },
 
     websocket_on_error: function () {

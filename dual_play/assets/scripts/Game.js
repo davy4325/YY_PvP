@@ -166,6 +166,7 @@ cc.Class({
     },
 
     onStartButton: function(event){
+        //pvp_connect.instance().set_disconnected();
         this.connect_to_server();
     },
 

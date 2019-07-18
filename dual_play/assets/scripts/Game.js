@@ -167,7 +167,6 @@ cc.Class({
 
     onStartButton: function(event){
         //pvp_connect.instance().set_disconnected();
-        let ss = pvp_connect.instance().is_connected();
         this.connect_to_server();
     },
 

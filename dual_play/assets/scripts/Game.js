@@ -309,6 +309,7 @@ cc.Class({
                                                                     0,//0：普通对战 1：好友对战，不受他人挑战干扰
                                                                     user_guid, 
                                                                     this.game_value,
+                                                                    0,//0: 普通号 1：内部测试号（互相之间不会匹配）
                                                                     user_info_code);
         //发送登录请求
         pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_login, obj_code);

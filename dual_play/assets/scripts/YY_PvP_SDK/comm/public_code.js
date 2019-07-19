@@ -32,13 +32,14 @@ var public_code = cc.Class({
         amf_obj.add(guid, 'guid');
         return amf_obj.write();
       },
-      result_guid_type_value_info: function (company_guid, game_type, friend_mode, user_guid, game_value, user_info) {
+      result_guid_type_value_info: function (company_guid, game_type, friend_mode, user_guid, game_value, is_internal, user_info) {
         var amf_obj = new AMFObject();
         amf_obj.add(game_type, 'game_type');
         amf_obj.add(friend_mode, 'friend_mode');
         amf_obj.add(company_guid, 'company_guid');
         amf_obj.add(user_guid, 'user_guid');
         amf_obj.add(game_value, 'game_value');
+        amf_obj.add(is_internal, 'is_internal');
         amf_obj.add(user_info, 'user_info');
         return amf_obj.write();
       },

@@ -166,7 +166,7 @@ cc.Class({
     },
 
     onStartButton: function(event){
-        //pvp_connect.instance().set_disconnected();
+        pvp_connect.instance().set_disconnected();
         this.connect_to_server();
     },
 
@@ -376,6 +376,7 @@ cc.Class({
     send_heartbeat: function() {
         //发送心跳消息，服务器心跳检测超时后会断开网络连接
         pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_heartbeat, "");
+        //pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_close, "");
     },
 
     global_res_game_rival: function (data) {

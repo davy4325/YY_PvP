@@ -173,6 +173,7 @@ cc.Class({
     connect_to_server: function () {
         pvp_utils.show_loading();
         pvp_connect.instance().connect_to(pvp_public_msg.WAN_url);
+        //pvp_connect.instance().connect_to("ws://127.0.0.1:8708");
     },
 
     net_data_callback: function () {
@@ -193,6 +194,9 @@ cc.Class({
                 break;
             case pvp_public_msg.websocket_on_repeat:
                 this.websocket_on_repeat();
+                break;
+            case pvp_public_msg.websocket_on_prev_close:
+                this.websocket_on_prev_close();
                 break;
             case pvp_public_msg.public_msg_rival_disconnect:
                 this.global_rival_disconnect(msg_data.data);
@@ -271,14 +275,21 @@ cc.Class({
     },
 
     websocket_on_close: function () {
-        cc.log("网络连接断开!");
+        console.log("网络连接断开!");
+        pvp_utils.show_tips("网络连接断开!", 20);
         //this.connect_to_server();
     },
 
     websocket_on_repeat: function () {
-        cc.log("无效重连!");
+        console.log("无效重连!");
         pvp_utils.hide_loading();
         pvp_utils.show_tips("无效重连!", 2);
+    },
+
+    websocket_on_prev_close: function () {
+        console.log("前一链接断开!");
+        pvp_utils.hide_loading();
+        pvp_utils.show_tips("前一链接断开!", 5);
     },
 
     websocket_on_error: function () {
@@ -293,7 +304,7 @@ cc.Class({
             user_guid = pvp_utils.uuid();
             pvp_utils.save_guid(user_guid);
         }
-        cc.log("user_guid:" + user_guid);
+        console.log("user_guid:" + user_guid);
         //测试使用手机型号作为游戏昵称
         var name = pvp_utils.get_model();
 
@@ -375,8 +386,8 @@ cc.Class({
     
     send_heartbeat: function() {
         //发送心跳消息，服务器心跳检测超时后会断开网络连接
+        console.log("发送心跳消息");
         pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_heartbeat, "");
-        //pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_close, "");
     },
 
     global_res_game_rival: function (data) {
@@ -390,8 +401,8 @@ cc.Class({
             //对手分值，可以展示出来
             var game_value = ret.game_value;
 
-            cc.log("me:" + pvp_utils.get_guid());
-            cc.log("rival:" + ret.user_guid);
+            console.log("me:" + pvp_utils.get_guid());
+            console.log("rival:" + ret.user_guid);
 
             //对手信息二进制编码
             var user_info = ret.user_info;
@@ -495,7 +506,7 @@ cc.Class({
 
         var obj_code_part = pvp_public_code.result_cmd_data(pvp_private_msg.local_msg_init_round_data_part, obj_data_part);
         /*******此处限制length不能超过1000**********/
-        cc.log(obj_code_part.length);
+        console.log(obj_code_part.length);
 
         pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_send_to_table, obj_code_part);
 
@@ -506,7 +517,7 @@ cc.Class({
 
         var obj_code_over = pvp_public_code.result_cmd_data(pvp_private_msg.local_msg_init_round_data_over, obj_data_over);
         /*******此处限制length不能超过1000**********/
-        cc.log(obj_code_over.length);
+        console.log(obj_code_over.length);
 
         pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_send_to_table, obj_code_over);
     },

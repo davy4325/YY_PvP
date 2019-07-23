@@ -5,6 +5,7 @@ var public_msg = {
     websocket_on_close: 11,
     websocket_on_error: 12,
     websocket_on_repeat: 13,
+    websocket_on_prev_close: 14,
     /*---------------global msg---------------*/
     public_msg_heartbeat: 1,
     public_msg_req_login: 4,

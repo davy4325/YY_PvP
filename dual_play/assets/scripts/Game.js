@@ -173,7 +173,6 @@ cc.Class({
     connect_to_server: function () {
         pvp_utils.show_loading();
         pvp_connect.instance().connect_to(pvp_public_msg.WAN_url);
-        //pvp_connect.instance().connect_to("ws://127.0.0.1:8708");
     },
 
     net_data_callback: function () {

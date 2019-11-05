@@ -38,5 +38,7 @@ var public_msg = {
     public_msg_res_friend_rival: 2053,
     public_msg_req_network_test: 2054,
     public_msg_res_network_test: 2055,
+    public_msg_req_match_info: 2056,
+    public_msg_res_match_info: 2057,
 }
 module.exports = public_msg;

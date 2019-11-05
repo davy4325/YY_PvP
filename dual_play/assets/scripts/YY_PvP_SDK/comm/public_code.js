@@ -101,5 +101,30 @@ var public_code = cc.Class({
         amf_obj.add(user_info, 'user_info');
         return amf_obj.write();
       },
+      read_match_infos: function (data) {
+        var amf_obj = new AMFObject();
+        amf_obj.new_deserializer(data);
+        amf_obj.read();
+
+        var ret = [];
+
+        var arr = amf_obj.get_array('match_infos');
+        for (var i = 0; i < arr.childrens.length; i++){
+            var amf_arr_obj = arr.childrens[i];
+
+            var obj = new Object();
+
+            obj.match_id = amf_arr_obj.get_value('match_id');
+            obj.fee = amf_arr_obj.get_value('fee');
+            obj.str_reward = amf_arr_obj.get_value('reward');
+            obj.str_start_time = amf_arr_obj.get_value('start_time');
+
+            obj.reward = JSON. parse(obj.str_reward);
+            obj.start_time = JSON. parse(obj.str_start_time);
+            
+            ret.push(obj);
+        }
+        return ret;
+      },
     }
 });

@@ -172,7 +172,7 @@ cc.Class({
 
     connect_to_server: function () {
         pvp_utils.show_loading();
-        pvp_connect.instance().connect_to(pvp_public_msg.WAN_url);
+        pvp_connect.instance().connect_to("ws://127.0.0.1:8708");
     },
 
     net_data_callback: function () {
@@ -228,6 +228,9 @@ cc.Class({
                 this.public_msg_res_send_to_rival(msg_data.data);
                 break;
             case pvp_public_msg.public_msg_res_network_test:
+                break;
+            case pvp_public_msg.public_msg_res_match_info:
+                this.public_msg_res_match_info(msg_data.data);
                 break;
             default:
                 break;
@@ -378,7 +381,7 @@ cc.Class({
             //pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_friend_rival, pvp_public_code.result_guid(win32));
 
             //请求匹配对手，自由对战
-            pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_rival, "");
+            pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_match_info, "");
             //pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_network_test, "");
         }
     },
@@ -576,5 +579,38 @@ cc.Class({
     rival_run_stop: function (data) {
         this.rival.getComponent('Player').accLeft = false;
         this.rival.getComponent('Player').accRight = false;
+    },
+
+    public_msg_res_match_info: function (data) {
+        //获取消息数据
+        var ret = pvp_public_code.read_match_infos(data);
+
+        for (var i = 0; i < ret.length; i++){
+            var obj = ret[i];
+
+            cc.log("match_id:" + obj.match_id);//赛场ID
+            cc.log("fee:" + obj.fee);//报名费
+
+            for( var j = 0; j < obj.start_time.start.length; j++){
+                cc.log("start_time:" + obj.start_time.start[j].begin);//开赛时间
+            }
+            
+            for( var j = 0; j < obj.reward.reward.length; j++){
+                var begin = obj.reward.reward[j].begin;//开始名次
+                var end = obj.reward.reward[j].end;//结束名次
+                cc.log("begin:" + begin + " end:" + end);
+                var coin = obj.reward.reward[j].coin;//数值奖励
+                if(undefined !== coin){
+                    cc.log("coin:" + coin);
+                }
+                var items = obj.reward.reward[j].items;//道具奖励
+                if(undefined !== items){
+                    for(var k = 0; k < items.length; k++){
+                        var item = items[k];
+                        cc.log("iid:" + item.iid + " num:" + item.num);
+                    }
+                }
+            }
+        }
     },
 });

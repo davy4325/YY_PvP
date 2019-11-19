@@ -1,6 +1,6 @@
 var public_msg = {
     /*---------------websocket msg---------------*/
-    WAN_url: "ws://127.0.0.1:8708",
+    WAN_url: "wss://www.whyouyou-srv1.com/wss",
     websocket_on_open: 10,
     websocket_on_close: 11,
     websocket_on_error: 12,

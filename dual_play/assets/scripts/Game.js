@@ -697,6 +697,14 @@ cc.Class({
 
     public_msg_res_match_detail_rank: function (data) {
         var ret = pvp_public_code.read_total_user_rank(data);
-        //pvp_utils.show_tips("match rank:" + ret.res, 2);
+
+        for (let i = 0; i < ret.ranks.length; i++){
+            let item = ret.ranks[i];
+            cc.log("name:" + item.name + " type:" + item.type + " rank:" + item.rank + " score:" + item.score);            
+        }
+
+        cc.log("total:" + ret.total + " remain:" + ret.remain);
+        
+        cc.log("name:" + ret.my_name + " type:" + ret.my_type + " rank:" + ret.my_rank + " score:" + ret.my_score); 
     },
 });

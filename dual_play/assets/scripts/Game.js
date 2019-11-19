@@ -172,7 +172,8 @@ cc.Class({
 
     connect_to_server: function () {
         pvp_utils.show_loading();
-        pvp_connect.instance().connect_to("ws://127.0.0.1:8708");
+        //pvp_connect.instance().connect_to("ws://127.0.0.1:8708");
+        pvp_connect.instance().connect_to(pvp_public_msg.WAN_url);
     },
 
     net_data_callback: function () {
@@ -231,6 +232,30 @@ cc.Class({
                 break;
             case pvp_public_msg.public_msg_res_match_info:
                 this.public_msg_res_match_info(msg_data.data);
+                break;
+            case pvp_public_msg.public_msg_res_join_match:
+                this.public_msg_res_join_match(msg_data.data);
+                break;
+            case pvp_public_msg.public_msg_res_quit_match:
+                this.public_msg_res_quit_match(msg_data.data);
+                break;
+            case pvp_public_msg.public_msg_res_match_wait_info:
+                this.public_msg_res_match_wait_info(msg_data.data);
+                break;
+            case pvp_public_msg.public_msg_res_match_start:
+                this.public_msg_res_match_start(msg_data.data);
+                break;
+            case pvp_public_msg.public_msg_res_battle_guid:
+                this.public_msg_res_battle_guid(msg_data.data);
+                break;
+            case pvp_public_msg.public_msg_res_battle_result:
+                this.public_msg_res_battle_result(msg_data.data);
+                break;
+            case pvp_public_msg.public_msg_res_match_reward:
+                this.public_msg_res_match_reward(msg_data.data);
+                break;
+            case pvp_public_msg.public_msg_res_match_detail_rank:
+                this.public_msg_res_match_detail_rank(msg_data.data);
                 break;
             default:
                 break;
@@ -381,8 +406,11 @@ cc.Class({
             //pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_friend_rival, pvp_public_code.result_guid(win32));
 
             //请求匹配对手，自由对战
-            pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_match_info, "");
+            //pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_match_info, pvp_public_code.result_res(0));
             //pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_network_test, "");
+
+            var obj_code = pvp_public_code.result_guid_name_info_mid(pvp_utils.get_guid(), "test", "", 1);
+            pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_join_match, obj_code);
         }
     },
     
@@ -589,6 +617,7 @@ cc.Class({
             var obj = ret[i];
 
             cc.log("match_id:" + obj.match_id);//赛场ID
+            cc.log("ver:" + obj.ver);//赛场版本
             cc.log("fee:" + obj.fee);//报名费
 
             for( var j = 0; j < obj.start_time.start.length; j++){
@@ -612,5 +641,62 @@ cc.Class({
                 }
             }
         }
+    },
+
+    button_send_win: function (data) {
+        pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_battle_result, pvp_public_code.result_res_score_rival(0, 100, 200));
+    },
+
+    button_send_lost: function (data) {
+        pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_battle_result, pvp_public_code.result_res_score_rival(1, 100, 200));
+    },
+
+    button_quit_match: function (data) {
+        pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_quit_match, "");
+    },
+
+    public_msg_res_join_match: function (data) {
+        var ret = pvp_public_code.read_res(data);
+        pvp_utils.show_tips("join_match:" + ret.res, 2);
+    },
+
+    public_msg_res_quit_match: function (data) {
+        pvp_utils.show_tips("res_quit_match", 2);
+    },
+
+    public_msg_res_match_wait_info: function (data) {
+        var ret = pvp_public_code.read_amount_time(data);
+        pvp_utils.show_tips("amount:" + ret.amount + " time:" + ret.time, 1);
+    },
+
+    public_msg_res_match_start: function (data) {
+        pvp_utils.show_tips("match_start", 1);
+        pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_set_friend_mode, pvp_public_code.result_res(1));
+    },
+
+    public_msg_res_battle_guid: function (data) {
+        var ret = pvp_public_code.read_guid(data);
+        pvp_utils.show_tips("battle guid" + ret.guid, 1);
+
+        pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_exit, "");
+        
+        if(ret.guid !== ""){
+            pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_friend_rival, pvp_public_code.result_guid(ret.guid));
+        }
+    },
+
+    public_msg_res_battle_result: function (data) {
+        var ret = pvp_public_code.read_res(data);
+        pvp_utils.show_tips("battle_result:" + ret.res, 2);
+    },
+
+    public_msg_res_match_reward: function (data) {
+        var ret = pvp_public_code.read_res(data);
+        pvp_utils.show_tips("match rank:" + ret.res, 2);
+    },
+
+    public_msg_res_match_detail_rank: function (data) {
+        var ret = pvp_public_code.read_total_user_rank(data);
+        //pvp_utils.show_tips("match rank:" + ret.res, 2);
     },
 });

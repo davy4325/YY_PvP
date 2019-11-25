@@ -48,8 +48,9 @@ var public_msg = {
     public_msg_res_match_start: 1208,
     public_msg_res_match_detail_rank: 1209,
     public_msg_res_match_reward: 1212,
-    public_msg_res_battle_guid: 1245,
-    public_msg_req_battle_result: 1246,
-    public_msg_res_battle_result: 1247,
+    public_msg_req_battle_guid: 1245,
+    public_msg_res_battle_guid: 1246,
+    public_msg_req_battle_result: 1247,
+    public_msg_res_battle_result: 1248,
 }
 module.exports = public_msg;

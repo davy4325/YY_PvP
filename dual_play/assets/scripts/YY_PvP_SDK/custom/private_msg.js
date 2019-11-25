@@ -1,7 +1,7 @@
 var private_msg = {
     /*-------------- pvp sdk info ----------------*/
     company_guid: "fd9d4907-3c34-4b66-a908-3b79816546a8",
-    game_type: 2,
+    game_type: 111,
 
     /*---------------local msg---------------*/
     local_msg_init_round_data_part: 80001,//同步场景

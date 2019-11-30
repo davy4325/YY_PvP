@@ -52,5 +52,8 @@ var public_msg = {
     public_msg_res_battle_guid: 1246,
     public_msg_req_battle_result: 1247,
     public_msg_res_battle_result: 1248,
+    public_msg_user_enroll: 1249,
+    public_msg_req_match_enroll_count: 1250,
+    public_msg_res_match_enroll_count: 1251,
 }
 module.exports = public_msg;

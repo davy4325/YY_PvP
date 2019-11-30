@@ -201,5 +201,38 @@ let public_code = cc.Class({
 
         return ret;
       },
+      result_match_enroll: function (mid, type) {    
+        let amf_obj = new AMFObject();
+
+        amf_obj.add(mid, 'mid');
+        amf_obj.add(type, 'type');
+        
+        return amf_obj.write();
+      },
+      read_match_user_count: function (data) {
+        let amf_obj = new AMFObject();
+        amf_obj.new_deserializer(data);
+        amf_obj.read();
+
+        let ret = new Object();
+
+        let arr_match_enroll = [];
+
+        let arr = amf_obj.get_array('match_enroll');
+        for (let i = 0; i < arr.childrens.length; i++){
+            let amf_arr_obj = arr.childrens[i];
+
+            let obj = new Object();
+
+            obj.mid = amf_arr_obj.get_value('mid');
+            obj.count = amf_arr_obj.get_value('count');
+
+            arr_match_enroll.push(obj);
+        }
+
+        ret.match_enroll = arr_match_enroll;
+
+        return ret;
+      },
     }
 });

@@ -55,5 +55,6 @@ var public_msg = {
     public_msg_user_enroll: 1249,
     public_msg_req_match_enroll_count: 1250,
     public_msg_res_match_enroll_count: 1251,
+    public_msg_match_normal: 1252,
 }
 module.exports = public_msg;

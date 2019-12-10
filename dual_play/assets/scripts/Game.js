@@ -418,6 +418,7 @@ cc.Class({
         //发送心跳消息，服务器心跳检测超时后会断开网络连接
         console.log("发送心跳消息");
         pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_heartbeat, "");
+        pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_match_normal, "");
     },
 
     global_res_game_rival: function (data) {
@@ -643,6 +644,10 @@ cc.Class({
         }
     },
 
+    button_send_matching: function (data) {
+        pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_battle_guid, "");
+    },
+
     button_send_win: function (data) {
         pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_battle_result, pvp_public_code.result_res_score_rival(0, 100, 200));
     },
@@ -666,7 +671,7 @@ cc.Class({
 
     public_msg_res_match_wait_info: function (data) {
         var ret = pvp_public_code.read_amount_time(data);
-        pvp_utils.show_tips("amount:" + ret.amount + " time:" + ret.time, 1);
+        pvp_utils.show_tips("amount:" + ret.amount + " enroll:"+ ret.enroll + " time:" + ret.time, 1);
     },
 
     public_msg_res_match_start: function (data) {

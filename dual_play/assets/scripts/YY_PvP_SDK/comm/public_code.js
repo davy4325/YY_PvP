@@ -152,6 +152,7 @@ let public_code = cc.Class({
         let ret = new Object();
 
         ret.amount = amf_obj.get_value('amount');
+        ret.enroll = amf_obj.get_value('enroll');
         ret.time = amf_obj.get_value('time');
 
         return ret;
@@ -195,7 +196,6 @@ let public_code = cc.Class({
         let user_rank = amf_obj.get_object('user_rank');
 
         ret.my_type = user_rank.get_value('type');
-        ret.my_name = user_rank.get_value('name');
         ret.my_rank = user_rank.get_value('rank');
         ret.my_score = user_rank.get_value('score');
 

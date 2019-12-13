@@ -38,8 +38,7 @@ var public_msg = {
     public_msg_res_friend_rival: 2053,
     public_msg_req_network_test: 2054,
     public_msg_res_network_test: 2055,
-    public_msg_req_match_info: 2056,
-    public_msg_res_match_info: 2057,
+    public_msg_notice: 2058,
     public_msg_req_join_match: 1201,
     public_msg_res_join_match: 1202,
     public_msg_req_quit_match: 1204,
@@ -55,6 +54,5 @@ var public_msg = {
     public_msg_user_enroll: 1249,
     public_msg_req_match_enroll_count: 1250,
     public_msg_res_match_enroll_count: 1251,
-    public_msg_match_normal: 1252,
 }
 module.exports = public_msg;

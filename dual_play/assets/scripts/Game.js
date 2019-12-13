@@ -207,6 +207,9 @@ cc.Class({
             case pvp_public_msg.public_msg_res_login:
                 this.global_res_login(msg_data.data);
                 break;
+            case pvp_public_msg.public_msg_notice:
+                this.public_msg_notice(msg_data.data);
+                break;    
             case pvp_public_msg.public_msg_res_rival:
                 this.global_res_game_rival(msg_data.data);
                 break;
@@ -357,8 +360,9 @@ cc.Class({
         pvp_utils.show_tips("对手掉线!", 20);
     },
 
-    public_msg_rival_exit: function (data) {
-        pvp_utils.show_tips("对手离开!", 20);
+    public_msg_notice: function (data) {
+        var ret = pvp_public_code.read_str(data);
+        console.log("notice:" + ret.str);
     },
 
     global_res_login: function (data) {
@@ -409,11 +413,15 @@ cc.Class({
             //pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_match_info, pvp_public_code.result_res(0));
             //pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_network_test, "");
 
-            var obj_code = pvp_public_code.result_guid_name_info_mid(pvp_utils.get_guid(), "test", "", 1);
-            pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_join_match, obj_code);
+            //var obj_code = pvp_public_code.result_guid_name_info_mid(pvp_utils.get_guid(), "test", "", 1);
+            //pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_join_match, obj_code);
         }
     },
     
+    public_msg_rival_exit: function (data) {
+        pvp_utils.show_tips("对手离开!", 20);
+    },
+
     send_heartbeat: function() {
         //发送心跳消息，服务器心跳检测超时后会断开网络连接
         console.log("发送心跳消息");

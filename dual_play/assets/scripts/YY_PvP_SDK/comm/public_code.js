@@ -3,6 +3,15 @@ const AMFArray = require('../net/AMF/AMFArray');
 
 let public_code = cc.Class({
     statics: {
+      read_str: function (data) {    
+        let amf_obj = new AMFObject();
+        amf_obj.new_deserializer(data);
+        amf_obj.read();
+
+        let ret = new Object();
+        ret.str = amf_obj.get_value('str');
+        return ret;
+      },
       read_res: function (data) {    
         let amf_obj = new AMFObject();
         amf_obj.new_deserializer(data);

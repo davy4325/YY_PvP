@@ -209,7 +209,10 @@ cc.Class({
                 break;
             case pvp_public_msg.public_msg_notice:
                 this.public_msg_notice(msg_data.data);
-                break;    
+                break;  
+            case pvp_public_msg.public_msg_res_match_remind:
+                this.public_msg_res_match_remind(msg_data.data);
+                break;     
             case pvp_public_msg.public_msg_res_rival:
                 this.global_res_game_rival(msg_data.data);
                 break;
@@ -362,7 +365,14 @@ cc.Class({
 
     public_msg_notice: function (data) {
         var ret = pvp_public_code.read_str(data);
+        pvp_utils.show_tips(ret.str, 2);
         console.log("notice:" + ret.str);
+    },
+
+    public_msg_res_match_remind: function (data) {
+        var ret = pvp_public_code.read_res(data);
+        pvp_utils.show_tips(ret.res, 2);
+        console.log("remind:" + ret.res);
     },
 
     global_res_login: function (data) {
@@ -412,9 +422,6 @@ cc.Class({
             //请求匹配对手，自由对战
             //pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_match_info, pvp_public_code.result_res(0));
             //pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_network_test, "");
-
-            //var obj_code = pvp_public_code.result_guid_name_info_mid(pvp_utils.get_guid(), "test", "", 1);
-            //pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_join_match, obj_code);
         }
     },
     
@@ -666,6 +673,11 @@ cc.Class({
 
     button_quit_match: function (data) {
         pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_quit_match, "");
+    },
+
+    button_join_match: function (data) {
+        var obj_code = pvp_public_code.result_guid_name_info_mid(pvp_utils.get_guid(), "test", "", 1);
+        pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_join_match, obj_code);
     },
 
     public_msg_res_join_match: function (data) {

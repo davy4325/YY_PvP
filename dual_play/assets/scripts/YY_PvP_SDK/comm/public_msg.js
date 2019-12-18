@@ -39,6 +39,8 @@ var public_msg = {
     public_msg_req_network_test: 2054,
     public_msg_res_network_test: 2055,
     public_msg_notice: 2058,
+    public_msg_res_match_remind: 2059,
+
     public_msg_req_join_match: 1201,
     public_msg_res_join_match: 1202,
     public_msg_req_quit_match: 1204,

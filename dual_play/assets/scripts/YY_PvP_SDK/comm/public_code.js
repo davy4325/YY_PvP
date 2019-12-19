@@ -218,6 +218,18 @@ let public_code = cc.Class({
         
         return amf_obj.write();
       },
+      read_match_remind: function (data) {
+        let amf_obj = new AMFObject();
+        amf_obj.new_deserializer(data);
+        amf_obj.read();
+
+        let ret = new Object();
+
+        ret.mid = amf_obj.get_value('mid');
+        ret.sec = amf_obj.get_value('count');
+
+        return ret;
+      },
       read_match_user_count: function (data) {
         let amf_obj = new AMFObject();
         amf_obj.new_deserializer(data);

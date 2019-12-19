@@ -370,9 +370,8 @@ cc.Class({
     },
 
     public_msg_res_match_remind: function (data) {
-        var ret = pvp_public_code.read_res(data);
-        pvp_utils.show_tips(ret.res, 2);
-        console.log("remind:" + ret.res);
+        var ret = pvp_public_code.read_match_remind(data);
+        console.log("mid:" + ret.mid + " sec:" + ret.sec);
     },
 
     global_res_login: function (data) {

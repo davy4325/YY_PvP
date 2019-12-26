@@ -36,6 +36,16 @@ let public_code = cc.Class({
         ret.res = amf_obj.get_value('res');
         return ret;
       },
+      read_guid_points: function (data) {
+        let amf_obj = new AMFObject();
+        amf_obj.new_deserializer(data);
+        amf_obj.read();
+
+        let ret = new Object();
+        ret.guid = amf_obj.get_value('guid');
+        ret.points = amf_obj.get_value('points');
+        return ret;
+      },
       read_guid: function (data) {    
         let amf_obj = new AMFObject();
         amf_obj.new_deserializer(data);
@@ -145,11 +155,11 @@ let public_code = cc.Class({
         }
         return ret;
       },
-      result_guid_name_info_mid: function (guid, name, info, mid) {
+      result_guid_name_face_mid: function (guid, name, face, mid) {
         let amf_obj = new AMFObject();
         amf_obj.add(guid, 'guid');
         amf_obj.add(name, 'name');
-        amf_obj.add(info, 'info');
+        amf_obj.add(face, 'face');
         amf_obj.add(mid, 'mid');
         return amf_obj.write();
       },
@@ -192,6 +202,7 @@ let public_code = cc.Class({
 
             obj.type = amf_arr_obj.get_value('type');
             obj.name = amf_arr_obj.get_value('name');
+            obj.face = amf_arr_obj.get_value('face');
             obj.rank = amf_arr_obj.get_value('rank');
             obj.score = amf_arr_obj.get_value('score');
 
@@ -230,6 +241,19 @@ let public_code = cc.Class({
 
         return ret;
       },
+      read_match_champion: function (data) {
+        let amf_obj = new AMFObject();
+        amf_obj.new_deserializer(data);
+        amf_obj.read();
+
+        let ret = new Object();
+
+        ret.mid = amf_obj.get_value('mid');
+        ret.name = amf_obj.get_value('name');
+        ret.face = amf_obj.get_value('face');
+
+        return ret;
+      },
       read_match_user_count: function (data) {
         let amf_obj = new AMFObject();
         amf_obj.new_deserializer(data);
@@ -253,6 +277,18 @@ let public_code = cc.Class({
 
         ret.match_enroll = arr_match_enroll;
 
+        return ret;
+      },
+      read_points_time: function (data) {
+        let amf_obj = new AMFObject();
+        amf_obj.new_deserializer(data);
+        amf_obj.read();
+
+        let ret = new Object();
+
+        ret.points = amf_obj.get_value('points');
+        ret.time = amf_obj.get_value('time');
+        
         return ret;
       },
     }

@@ -1,6 +1,7 @@
 var public_msg = {
     /*---------------websocket msg---------------*/
-    WAN_url: "wss://www.whyouyou-srv1.com/wss",
+    //WAN_url: "wss://www.whyouyou-srv1.com/wss",
+    WAN_url: "ws://127.0.0.1:8708",
     websocket_on_open: 10,
     websocket_on_close: 11,
     websocket_on_error: 12,
@@ -40,15 +41,19 @@ var public_msg = {
     public_msg_res_network_test: 2055,
     public_msg_notice: 2058,
     public_msg_res_match_remind: 2059,
+    public_msg_res_match_champion: 2060,
+    public_msg_req_timestamp: 2061,
+    public_msg_res_timestamp: 2062,
 
     public_msg_req_join_match: 1201,
     public_msg_res_join_match: 1202,
+    public_msg_res_points_info: 1203,
     public_msg_req_quit_match: 1204,
     public_msg_res_quit_match: 1205,
     public_msg_res_match_wait_info: 1207,
     public_msg_res_match_start: 1208,
+    public_msg_req_match_detail_rank: 1220,
     public_msg_res_match_detail_rank: 1209,
-    public_msg_res_match_reward: 1212,
     public_msg_req_battle_guid: 1245,
     public_msg_res_battle_guid: 1246,
     public_msg_req_battle_result: 1247,
@@ -56,5 +61,6 @@ var public_msg = {
     public_msg_user_enroll: 1249,
     public_msg_req_match_enroll_count: 1250,
     public_msg_res_match_enroll_count: 1251,
+    public_msg_res_match_playing_count: 1253,
 }
 module.exports = public_msg;

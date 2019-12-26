@@ -213,6 +213,13 @@ cc.Class({
             case pvp_public_msg.public_msg_res_match_remind:
                 this.public_msg_res_match_remind(msg_data.data);
                 break;     
+            case pvp_public_msg.public_msg_res_match_champion:
+                this.public_msg_res_match_champion(msg_data.data);
+                break;
+            case pvp_public_msg.public_msg_res_timestamp:
+                this.public_msg_res_timestamp(msg_data.data);
+                break;
+
             case pvp_public_msg.public_msg_res_rival:
                 this.global_res_game_rival(msg_data.data);
                 break;
@@ -242,6 +249,9 @@ cc.Class({
             case pvp_public_msg.public_msg_res_join_match:
                 this.public_msg_res_join_match(msg_data.data);
                 break;
+            case pvp_public_msg.public_msg_res_points_info:
+                this.public_msg_res_points_info(msg_data.data);
+                break;     
             case pvp_public_msg.public_msg_res_quit_match:
                 this.public_msg_res_quit_match(msg_data.data);
                 break;
@@ -257,11 +267,11 @@ cc.Class({
             case pvp_public_msg.public_msg_res_battle_result:
                 this.public_msg_res_battle_result(msg_data.data);
                 break;
-            case pvp_public_msg.public_msg_res_match_reward:
-                this.public_msg_res_match_reward(msg_data.data);
-                break;
             case pvp_public_msg.public_msg_res_match_detail_rank:
                 this.public_msg_res_match_detail_rank(msg_data.data);
+                break;
+            case pvp_public_msg.public_msg_res_match_playing_count:
+                this.public_msg_res_match_playing_count(msg_data.data);
                 break;
             default:
                 break;
@@ -357,6 +367,7 @@ cc.Class({
                                                                     user_info_code);
         //发送登录请求
         pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_login, obj_code);
+        pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_timestamp, "");
     },
 
     global_rival_disconnect: function (data) {
@@ -372,6 +383,16 @@ cc.Class({
     public_msg_res_match_remind: function (data) {
         var ret = pvp_public_code.read_match_remind(data);
         console.log("mid:" + ret.mid + " sec:" + ret.sec);
+    },
+
+    public_msg_res_match_champion: function (data) {
+        var ret = pvp_public_code.read_match_champion(data);
+        console.log("mid:" + ret.mid + " name:" + ret.name + " face:" + ret.face);
+    },
+
+    public_msg_res_timestamp: function (data) {
+        var ret = pvp_public_code.read_time(data);
+        console.log("time:" + ret.time);
     },
 
     global_res_login: function (data) {
@@ -419,7 +440,7 @@ cc.Class({
             //pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_friend_rival, pvp_public_code.result_guid(win32));
 
             //请求匹配对手，自由对战
-            //pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_match_info, pvp_public_code.result_res(0));
+            //pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_rival, "");
             //pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_network_test, "");
         }
     },
@@ -432,7 +453,6 @@ cc.Class({
         //发送心跳消息，服务器心跳检测超时后会断开网络连接
         console.log("发送心跳消息");
         pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_heartbeat, "");
-        pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_match_normal, "");
     },
 
     global_res_game_rival: function (data) {
@@ -675,13 +695,22 @@ cc.Class({
     },
 
     button_join_match: function (data) {
-        var obj_code = pvp_public_code.result_guid_name_info_mid(pvp_utils.get_guid(), "test", "", 1);
+        var obj_code = pvp_public_code.result_guid_name_face_mid(pvp_utils.get_guid(), "test", "face.jpg", 1);
         pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_join_match, obj_code);
+    },
+
+    button_rank: function (data) {
+        pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_match_detail_rank, "");
     },
 
     public_msg_res_join_match: function (data) {
         var ret = pvp_public_code.read_res(data);
         pvp_utils.show_tips("join_match:" + ret.res, 2);
+    },
+
+    public_msg_res_points_info: function (data) {
+        var ret = pvp_public_code.read_points_time(data);
+        cc.log("points:" + ret.points + " time:" + ret.time);
     },
 
     public_msg_res_quit_match: function (data) {
@@ -690,7 +719,7 @@ cc.Class({
 
     public_msg_res_match_wait_info: function (data) {
         var ret = pvp_public_code.read_amount_time(data);
-        pvp_utils.show_tips("amount:" + ret.amount + " enroll:"+ ret.enroll + " time:" + ret.time, 1);
+        pvp_utils.show_tips("amount:" + ret.amount + " enroll:"+ ret.enroll + " time:" + ret.time, 3);
     },
 
     public_msg_res_match_start: function (data) {
@@ -699,8 +728,8 @@ cc.Class({
     },
 
     public_msg_res_battle_guid: function (data) {
-        var ret = pvp_public_code.read_guid(data);
-        pvp_utils.show_tips("battle guid" + ret.guid, 1);
+        var ret = pvp_public_code.read_guid_points(data);
+        pvp_utils.show_tips("battle guid:" + ret.guid + " points:" + ret.points, 1);
 
         pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_exit, "");
         
@@ -724,11 +753,16 @@ cc.Class({
 
         for (let i = 0; i < ret.ranks.length; i++){
             let item = ret.ranks[i];
-            cc.log("name:" + item.name + " type:" + item.type + " rank:" + item.rank + " score:" + item.score);            
+            cc.log("name:" + item.name + " face:" + item.face + " type:" + item.type + " rank:" + item.rank + " score:" + item.score);            
         }
 
         cc.log("total:" + ret.total + " remain:" + ret.remain);
         
-        cc.log("name:" + ret.my_name + " type:" + ret.my_type + " rank:" + ret.my_rank + " score:" + ret.my_score); 
+        cc.log("type:" + ret.my_type + " rank:" + ret.my_rank + " score:" + ret.my_score); 
+    },
+
+    public_msg_res_match_playing_count: function (data) {
+        var ret = pvp_public_code.read_res(data);
+        cc.log("res:" + ret.res);
     },
 });

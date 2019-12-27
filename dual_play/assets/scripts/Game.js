@@ -219,6 +219,12 @@ cc.Class({
             case pvp_public_msg.public_msg_res_timestamp:
                 this.public_msg_res_timestamp(msg_data.data);
                 break;
+            case pvp_public_msg.public_msg_res_ready_time:
+                this.public_msg_res_ready_time(msg_data.data);
+                break;
+            case pvp_public_msg.public_msg_res_init_data:
+                this.public_msg_res_init_data(msg_data.data);
+                break;
 
             case pvp_public_msg.public_msg_res_rival:
                 this.global_res_game_rival(msg_data.data);
@@ -395,6 +401,16 @@ cc.Class({
         console.log("time:" + ret.time);
     },
 
+    public_msg_res_ready_time: function (data) {
+        var ret = pvp_public_code.read_time(data);
+        console.log("ready time:" + ret.time);
+    },
+
+    public_msg_res_init_data: function (data) {
+        var ret = pvp_public_code.read_guid(data);
+        console.log("guid:" + ret.guid);
+    },
+
     global_res_login: function (data) {
         pvp_utils.hide_loading();//隐藏loading
 
@@ -440,7 +456,7 @@ cc.Class({
             //pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_friend_rival, pvp_public_code.result_guid(win32));
 
             //请求匹配对手，自由对战
-            //pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_rival, "");
+            pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_rival, "");
             //pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_network_test, "");
         }
     },
@@ -545,6 +561,9 @@ cc.Class({
                 pvp_utils.show_tips("即将开始对战！", 2);
 
                 this.wx_game_init();//开始初始化并同步场景数据
+
+                pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_ready_time, "");
+                pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_init_data, pvp_public_code.result_guid('abcdefg'));
             }else{
                 
                 this.is_rival = true;//标记挑战者
@@ -555,6 +574,9 @@ cc.Class({
                 var x = this.player.x;
                 this.player.x = this.rival.x;
                 this.rival.x = x;
+
+                pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_ready_time, "");
+                pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_init_data, pvp_public_code.result_guid('123456'));
             }
         }else{//对方拒绝挑战
             pvp_ask_box.instance().show("对方拒绝加入，点确定重新匹配!",  this, this.req_rival);

@@ -1,7 +1,6 @@
 var public_msg = {
     /*---------------websocket msg---------------*/
-    //WAN_url: "wss://www.whyouyou-srv1.com/wss",
-    WAN_url: "ws://127.0.0.1:8708",
+    WAN_url: "wss://www.whyouyou-srv1.com/wss",
     websocket_on_open: 10,
     websocket_on_close: 11,
     websocket_on_error: 12,
@@ -44,6 +43,10 @@ var public_msg = {
     public_msg_res_match_champion: 2060,
     public_msg_req_timestamp: 2061,
     public_msg_res_timestamp: 2062,
+    public_msg_req_ready_time: 2063,
+    public_msg_res_ready_time: 2064,
+    public_msg_req_init_data: 2065,
+    public_msg_res_init_data: 2066,
 
     public_msg_req_join_match: 1201,
     public_msg_res_join_match: 1202,

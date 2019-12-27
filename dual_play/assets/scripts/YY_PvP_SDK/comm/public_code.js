@@ -229,6 +229,24 @@ let public_code = cc.Class({
         
         return amf_obj.write();
       },
+      result_string: function (str) {
+        let amf_obj = new AMFObject();
+
+        amf_obj.add(str, 'str');
+
+        return amf_obj.write();
+      },
+      read_string: function (data) {
+        let amf_obj = new AMFObject();
+        amf_obj.new_deserializer(data);
+        amf_obj.read();
+
+        let ret = new Object();
+
+        ret.str = amf_obj.get_value('str');
+
+        return ret;
+      },
       read_match_remind: function (data) {
         let amf_obj = new AMFObject();
         amf_obj.new_deserializer(data);

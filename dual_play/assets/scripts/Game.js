@@ -456,7 +456,7 @@ cc.Class({
             //pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_friend_rival, pvp_public_code.result_guid(win32));
 
             //请求匹配对手，自由对战
-            pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_rival, "");
+            //pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_rival, "");
             //pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_network_test, "");
         }
     },
@@ -717,7 +717,7 @@ cc.Class({
     },
 
     button_join_match: function (data) {
-        var obj_code = pvp_public_code.result_guid_name_face_mid(pvp_utils.get_guid(), "test", "face.jpg", 1);
+        var obj_code = pvp_public_code.result_guid_name_face_mid(pvp_utils.get_guid(), 123, "test", "face.jpg", 1);
         pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_join_match, obj_code);
     },
 

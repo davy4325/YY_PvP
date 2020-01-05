@@ -177,6 +177,31 @@ let public_code = cc.Class({
 
         return ret;
       },
+      read_mid_time: function (data) {
+        let amf_obj = new AMFObject();
+        amf_obj.new_deserializer(data);
+        amf_obj.read();
+
+        let ret = new Object();
+
+        ret.mid = amf_obj.get_value('mid');
+        ret.time = amf_obj.get_value('count');
+
+        return ret;
+      },
+      read_online_number: function (data) {
+        let amf_obj = new AMFObject();
+        amf_obj.new_deserializer(data);
+        amf_obj.read();
+
+        let ret = new Object();
+
+        ret.match = amf_obj.get_value('match');
+        ret.battle = amf_obj.get_value('battle');
+        ret.single = amf_obj.get_value('single');
+
+        return ret;
+      },
       result_res_score_rival: function (res, score, rival_score) {    
         let amf_obj = new AMFObject();
 

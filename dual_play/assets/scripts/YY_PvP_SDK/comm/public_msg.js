@@ -39,7 +39,6 @@ var public_msg = {
     public_msg_req_network_test: 2054,
     public_msg_res_network_test: 2055,
     public_msg_notice: 2058,
-    public_msg_res_match_remind: 2059,
     public_msg_res_match_champion: 2060,
     public_msg_req_timestamp: 2061,
     public_msg_res_timestamp: 2062,
@@ -47,6 +46,10 @@ var public_msg = {
     public_msg_res_ready_time: 2064,
     public_msg_req_init_data: 2065,
     public_msg_res_init_data: 2066,
+    public_msg_req_match_remind: 2067,
+    public_msg_res_match_remind: 2068,
+    public_msg_req_online_number: 2069,
+    public_msg_res_online_number: 2070,
 
     public_msg_req_join_match: 1201,
     public_msg_res_join_match: 1202,
@@ -55,6 +58,7 @@ var public_msg = {
     public_msg_res_quit_match: 1205,
     public_msg_res_match_wait_info: 1207,
     public_msg_res_match_start: 1208,
+    public_msg_res_match_end: 1213,
     public_msg_req_match_detail_rank: 1220,
     public_msg_res_match_detail_rank: 1209,
     public_msg_req_battle_guid: 1245,
@@ -65,5 +69,6 @@ var public_msg = {
     public_msg_req_match_enroll_count: 1250,
     public_msg_res_match_enroll_count: 1251,
     public_msg_res_match_playing_count: 1253,
+    public_msg_res_match_rival_exit: 1254,
 }
 module.exports = public_msg;

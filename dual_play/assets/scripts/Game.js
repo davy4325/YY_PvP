@@ -209,10 +209,7 @@ cc.Class({
                 break;
             case pvp_public_msg.public_msg_notice:
                 this.public_msg_notice(msg_data.data);
-                break;  
-            case pvp_public_msg.public_msg_res_match_remind:
-                this.public_msg_res_match_remind(msg_data.data);
-                break;     
+                break;    
             case pvp_public_msg.public_msg_res_match_champion:
                 this.public_msg_res_match_champion(msg_data.data);
                 break;
@@ -252,6 +249,12 @@ cc.Class({
             case pvp_public_msg.public_msg_res_match_info:
                 this.public_msg_res_match_info(msg_data.data);
                 break;
+            case pvp_public_msg.public_msg_res_match_remind:
+                this.public_msg_res_match_remind(msg_data.data);
+                break;
+            case pvp_public_msg.public_msg_res_online_number:
+                this.public_msg_res_online_number(msg_data.data);
+                break;
             case pvp_public_msg.public_msg_res_join_match:
                 this.public_msg_res_join_match(msg_data.data);
                 break;
@@ -267,6 +270,9 @@ cc.Class({
             case pvp_public_msg.public_msg_res_match_start:
                 this.public_msg_res_match_start(msg_data.data);
                 break;
+            case pvp_public_msg.public_msg_res_match_end:
+                this.public_msg_res_match_end(msg_data.data);
+                break;    
             case pvp_public_msg.public_msg_res_battle_guid:
                 this.public_msg_res_battle_guid(msg_data.data);
                 break;
@@ -278,6 +284,9 @@ cc.Class({
                 break;
             case pvp_public_msg.public_msg_res_match_playing_count:
                 this.public_msg_res_match_playing_count(msg_data.data);
+                break;
+            case pvp_public_msg.public_msg_res_match_rival_exit:
+                this.public_msg_res_match_rival_exit(msg_data.data);
                 break;
             default:
                 break;
@@ -458,11 +467,17 @@ cc.Class({
             //请求匹配对手，自由对战
             //pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_rival, "");
             //pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_network_test, "");
+
+            pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_match_remind, "");
         }
     },
     
     public_msg_rival_exit: function (data) {
-        pvp_utils.show_tips("对手离开!", 20);
+        pvp_utils.show_tips("对手离开!", 2);
+    },
+
+    public_msg_res_match_rival_exit: function (data) {
+        pvp_utils.show_tips("锦标赛对手离开!", 2);
     },
 
     send_heartbeat: function() {
@@ -723,6 +738,8 @@ cc.Class({
 
     button_rank: function (data) {
         pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_match_detail_rank, "");
+        //pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_match_remind, "");
+        //pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_online_number, "");
     },
 
     public_msg_res_join_match: function (data) {
@@ -747,6 +764,21 @@ cc.Class({
     public_msg_res_match_start: function (data) {
         pvp_utils.show_tips("match_start", 1);
         pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_set_friend_mode, pvp_public_code.result_res(1));
+    },
+
+    public_msg_res_match_end: function (data) {
+        cc.log("public_msg_res_match_end");
+        pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_match_detail_rank, "");
+    },
+
+    public_msg_res_match_remind: function (data) {
+        var ret = pvp_public_code.read_mid_time(data);
+        cc.log("mid:" + ret.mid + " time:" + ret.time);
+    },
+
+    public_msg_res_online_number: function (data) {
+        var ret = pvp_public_code.read_online_number(data);
+        cc.log("match:" + ret.match + " battle:" + ret.battle + " single:" + ret.single);
     },
 
     public_msg_res_battle_guid: function (data) {

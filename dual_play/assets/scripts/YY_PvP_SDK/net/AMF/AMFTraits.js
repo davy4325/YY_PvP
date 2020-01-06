@@ -1,1 +1,1 @@
-var AMFTraits=cc['Class']({'\x70\x72\x6f\x70\x65\x72\x74\x69\x65\x73':{'\x63\x6c\x73\x73':'Object','\x64\x79\x6e':![],'\x70\x72\x6f\x70\x73':[]},'\x63\x74\x6f\x72':function(){},'\x74\x6f\x53\x74\x72\x69\x6e\x67':function(){return'\x5bObject\x20AMFTraits\x5d';}});
+var AMFTraits=cc['Class']({'properties':{'clss':'Object','dyn':![],'props':[]},'ctor':function(){},'toString':function(){var _0x25d138={'MBByu':'[Object\x20AMFTraits]'};return _0x25d138['MBByu'];}});

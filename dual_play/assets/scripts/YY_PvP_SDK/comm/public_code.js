@@ -84,13 +84,13 @@ let public_code = cc.Class({
       result_cmd_data: function (cmd, data) {
         let amf_obj = new AMFObject();
         amf_obj.add(cmd, 'cmd');
-        amf_obj.add(data, 'data');
+        amf_obj.add_amf_code(data, 'data');
         return amf_obj.write();
       },
       read_cmd_data: function (data) {
         let amf_obj = new AMFObject();
         amf_obj.new_deserializer(data);
-        amf_obj.read();
+        amf_obj.read_cmd_data();
 
         let ret = new Object();
         ret.cmd = parseInt(amf_obj.get_value('cmd'));

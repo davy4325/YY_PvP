@@ -732,7 +732,7 @@ cc.Class({
     },
 
     button_join_match: function (data) {
-        var obj_code = pvp_public_code.result_guid_name_face_mid(pvp_utils.get_guid(), 123, "test", "face.jpg", 1);
+        var obj_code = pvp_public_code.result_guid_name_face_mid(pvp_utils.get_guid(), 123, "test", "face.jpg", 4);
         pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_join_match, obj_code);
     },
 
@@ -748,8 +748,18 @@ cc.Class({
     },
 
     public_msg_res_points_info: function (data) {
-        var ret = pvp_public_code.read_points_time(data);
-        cc.log("points:" + ret.points + " time:" + ret.time);
+        var ret = pvp_public_code.read_join_points_info(data);
+        
+        if(ret.ranks !== null){
+            for (let i = 0; i < ret.ranks.length; i++){
+                let item = ret.ranks[i];
+                cc.log("name:" + item.name + " face:" + item.face + " rank:" + item.rank + " score:" + item.score);            
+            }
+        }
+
+        cc.log("total:" + ret.total + " start_time:" + ret.start_time);
+        
+        cc.log("my_points:" + ret.my_points + " my_rank:" + ret.my_rank);
     },
 
     public_msg_res_quit_match: function (data) {

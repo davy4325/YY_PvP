@@ -323,16 +323,40 @@ let public_code = cc.Class({
 
         return ret;
       },
-      read_points_time: function (data) {
+      read_join_points_info: function (data) {
         let amf_obj = new AMFObject();
         amf_obj.new_deserializer(data);
         amf_obj.read();
 
         let ret = new Object();
 
-        ret.points = amf_obj.get_value('points');
-        ret.time = amf_obj.get_value('time');
-        
+        let arr_rank = [];
+
+        let arr = amf_obj.get_array('rank');
+        if(arr !== null){
+            for (let i = 0; i < arr.childrens.length; i++){
+              let amf_arr_obj = arr.childrens[i];
+
+              let obj = new Object();
+
+              obj.type = amf_arr_obj.get_value('type');
+              obj.name = amf_arr_obj.get_value('name');
+              obj.face = amf_arr_obj.get_value('face');
+              obj.rank = amf_arr_obj.get_value('rank');
+              obj.score = amf_arr_obj.get_value('score');
+
+              arr_rank.push(obj);
+            }
+        }
+
+        ret.ranks = arr_rank;
+        ret.total = amf_obj.get_value('total');
+        ret.start_time = amf_obj.get_value('start_time');
+        //ret.end_time = amf_obj.get_value('end_time');
+
+        ret.my_points = amf_obj.get_value('my_points');
+        ret.my_rank = amf_obj.get_value('my_rank');
+
         return ret;
       },
     }

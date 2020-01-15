@@ -50,6 +50,7 @@ var public_msg = {
     public_msg_res_match_remind: 2068,
     public_msg_req_online_number: 2069,
     public_msg_res_online_number: 2070,
+    public_msg_req_rival_disconnect: 2071,
 
     public_msg_req_join_match: 1201,
     public_msg_res_join_match: 1202,

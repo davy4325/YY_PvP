@@ -715,6 +715,14 @@ cc.Class({
         }
     },
 
+    button_send_rival_disconnect: function (data) {
+        pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_rival_disconnect, "");
+    },
+
+    button_send_req_rival: function (data) {
+        pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_rival, "");
+    },
+
     button_send_matching: function (data) {
         pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_battle_guid, "");
     },
@@ -732,7 +740,7 @@ cc.Class({
     },
 
     button_join_match: function (data) {
-        var obj_code = pvp_public_code.result_guid_name_face_mid(pvp_utils.get_guid(), 123, "test", "face.jpg", 4);
+        var obj_code = pvp_public_code.result_guid_name_face_mid(pvp_utils.get_guid(), 123, "test", "face.jpg", 1);
         pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_join_match, obj_code);
     },
 

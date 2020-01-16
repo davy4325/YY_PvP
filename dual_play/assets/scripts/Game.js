@@ -172,8 +172,8 @@ cc.Class({
 
     connect_to_server: function () {
         pvp_utils.show_loading();
-        //pvp_connect.instance().connect_to("ws://127.0.0.1:8708");
-        pvp_connect.instance().connect_to(pvp_public_msg.WAN_url);
+        pvp_connect.instance().connect_to("ws://127.0.0.1:8708");
+        //pvp_connect.instance().connect_to(pvp_public_msg.WAN_url);
     },
 
     net_data_callback: function () {
@@ -740,7 +740,7 @@ cc.Class({
     },
 
     button_join_match: function (data) {
-        var obj_code = pvp_public_code.result_guid_name_face_mid(pvp_utils.get_guid(), 123, "test", "face.jpg", 1);
+        var obj_code = pvp_public_code.result_guid_name_face_mid(pvp_utils.get_guid(), 123, "test", "face.jpg", 5);
         pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_join_match, obj_code);
     },
 

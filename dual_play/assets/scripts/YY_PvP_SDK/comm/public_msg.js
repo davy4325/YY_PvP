@@ -71,5 +71,6 @@ var public_msg = {
     public_msg_res_match_enroll_count: 1251,
     public_msg_res_match_playing_count: 1253,
     public_msg_res_match_rival_exit: 1254,
+    public_msg_req_match_wait_info: 1255,
 }
 module.exports = public_msg;

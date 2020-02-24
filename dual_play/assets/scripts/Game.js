@@ -173,6 +173,7 @@ cc.Class({
     connect_to_server: function () {
         pvp_utils.show_loading();
         pvp_connect.instance().connect_to("ws://127.0.0.1:8708");
+        //pvp_connect.instance().connect_to("ws://47.104.128.207:8708");
         //pvp_connect.instance().connect_to(pvp_public_msg.WAN_url);
     },
 
@@ -287,6 +288,9 @@ cc.Class({
                 break;
             case pvp_public_msg.public_msg_res_match_rival_exit:
                 this.public_msg_res_match_rival_exit(msg_data.data);
+                break;
+            case pvp_public_msg.public_msg_res_match_enroll_count:
+                this.public_msg_res_match_enroll_count(msg_data.data);
                 break;
             default:
                 break;
@@ -740,7 +744,7 @@ cc.Class({
     },
 
     button_join_match: function (data) {
-        var obj_code = pvp_public_code.result_guid_name_face_mid(pvp_utils.get_guid(), 123, "test", "face.jpg", 5);
+        var obj_code = pvp_public_code.result_guid_name_face_mid(pvp_utils.get_guid(), 123, "test", "face.jpg", 1);
         pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_join_match, obj_code);
     },
 
@@ -802,8 +806,6 @@ cc.Class({
     public_msg_res_battle_guid: function (data) {
         var ret = pvp_public_code.read_guid_points(data);
         pvp_utils.show_tips("battle guid:" + ret.guid + " points:" + ret.points, 1);
-
-        pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_exit, "");
         
         if(ret.guid !== ""){
             pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_friend_rival, pvp_public_code.result_guid(ret.guid));
@@ -837,4 +839,12 @@ cc.Class({
         var ret = pvp_public_code.read_res(data);
         cc.log("res:" + ret.res);
     },
+
+    public_msg_res_match_enroll_count: function (data) {
+        var ret = pvp_public_code.read_match_user_count(data);
+        for (let i = 0; i < ret.match_enroll.length; i++){
+             let item = ret.match_enroll[i];
+             cc.log("mid:" + item.mid + " count:" + item.count);
+        }
+    }
 });

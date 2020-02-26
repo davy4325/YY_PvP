@@ -79,6 +79,7 @@ let public_code = cc.Class({
         let ret = new Object();
         ret.time = parseInt(amf_obj.get_value('time'));
         ret.is_reconnect = parseInt(amf_obj.get_value('is_reconnect'));
+        ret.mid = parseInt(amf_obj.get_value('mid'));
         return ret;
       },
       result_cmd_data: function (cmd, data) {
@@ -247,11 +248,12 @@ let public_code = cc.Class({
 
         return ret;
       },
-      result_match_enroll: function (mid, type) {    
+      result_match_enroll: function (mid, type, guid) {    
         let amf_obj = new AMFObject();
 
         amf_obj.add(mid, 'mid');
         amf_obj.add(type, 'type');
+        amf_obj.add(guid, 'guid');
         
         return amf_obj.write();
       },

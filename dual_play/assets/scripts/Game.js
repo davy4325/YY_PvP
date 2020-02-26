@@ -292,6 +292,12 @@ cc.Class({
             case pvp_public_msg.public_msg_res_match_enroll_count:
                 this.public_msg_res_match_enroll_count(msg_data.data);
                 break;
+            case pvp_public_msg.public_msg_res_match_remaining_players:
+                this.public_msg_res_match_remaining_players(msg_data.data);
+                break;
+            case pvp_public_msg.public_msg_res_match_revive:
+                this.public_msg_res_match_revive(msg_data.data);
+                break;
             default:
                 break;
         }
@@ -743,8 +749,12 @@ cc.Class({
         pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_quit_match, "");
     },
 
+    button_match_revive: function (data) {
+        pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_match_revive, "");
+    },
+
     button_join_match: function (data) {
-        var obj_code = pvp_public_code.result_guid_name_face_mid(pvp_utils.get_guid(), 123, "test", "face.jpg", 1);
+        var obj_code = pvp_public_code.result_guid_name_face_mid(pvp_utils.get_guid(), 123, "test", "face.jpg", 4);
         pvp_connect.instance().send_cmd(pvp_public_msg.public_msg_req_join_match, obj_code);
     },
 
@@ -846,5 +856,15 @@ cc.Class({
              let item = ret.match_enroll[i];
              cc.log("mid:" + item.mid + " count:" + item.count);
         }
-    }
+    },
+
+    public_msg_res_match_remaining_players: function (data) {
+        var ret = pvp_public_code.read_res(data);
+        cc.log("remaining_players:" + ret.res);
+    },
+
+    public_msg_res_match_revive: function (data) {
+        var ret = pvp_public_code.read_res(data);
+        cc.log("revive:" + ret.res);
+    },
 });
